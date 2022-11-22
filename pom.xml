@@ -6,7 +6,7 @@
     <modules>
         <module>product-service</module>
         <module>user-service</module>
-        <module>review-service</module>
+<!--        <module>review-service</module>-->
         <module>service-discovery</module>
         <module>config-server</module>
         <module>api-gateway</module>
