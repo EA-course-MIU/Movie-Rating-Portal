@@ -35,6 +35,7 @@ Your project must have
 * User can filter movies or tv series by :
     * released year,
     * rating,
+    * movie,
     * genre,
     * director,
     * actor/actress
