@@ -1,1 +1,4 @@
-INSERT INTO public.reviews (id, comment, id_product, id_user) VALUES (DEFAULT, 'Good', 1, 1);
+-- insert into comment (id,comment,created_date,media_type,update_date) values (1,'Wonderful','01/21/2022','movie','11/22/2022');
+-- insert into comment (id,comment,created_date,media_type,update_date) values (2,'Nice','02/21/2022','tv','11/22/2022');
+-- insert into comment (id,comment,created_date,media_type,update_date) values (3,'Best movie','02/21/2022','movie','11/22/2022');
+-- insert into comment (id,comment,created_date,media_type,update_date) values (4,'Fantasy','03/21/2022','episode','12/22/2022');
