@@ -1,7 +1,7 @@
-package com.edu.miu.service.impl;
+package com.edu.miu.publisher.impl;
 
 import com.edu.miu.dto.MediaRatingDto;
-import com.edu.miu.service.PublisherService;
+import com.edu.miu.publisher.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

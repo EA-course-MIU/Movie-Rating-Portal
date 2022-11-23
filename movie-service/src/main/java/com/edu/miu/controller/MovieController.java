@@ -44,6 +44,7 @@ public class MovieController {
     public List<MovieDto> filter(MovieCriteria movieCriteria) {
         return movieService.filterMovies(movieCriteria);
     }
+
     @PostMapping
     public MovieDto addMovie(@RequestBody MovieDto movieDto) {
         return movieService.addMovie(movieDto);

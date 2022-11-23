@@ -1,8 +1,6 @@
-package com.edu.miu.repository;
+package com.edu.miu.dao.repository;
 
-import com.edu.miu.dto.MovieDto;
 import com.edu.miu.entity.Movie;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +11,10 @@ public interface MovieRepository extends CrudRepository<Movie, Integer> {
 
     List<Movie> findAll();
 
-    List<Movie> findAllByDirectorsId(int id);
+    List<Movie> findAllByMediaDirectorsIdDirectorId(int id);
 
-    List<Movie> findAllByActorsId(int id);
+    List<Movie> findAllByMediaActorsIdActorId(int id);
 
-    List<Movie> findAllByGenresId(int id);
+    List<Movie> findAllByMediaGenresIdGenreId(int id);
 
 }

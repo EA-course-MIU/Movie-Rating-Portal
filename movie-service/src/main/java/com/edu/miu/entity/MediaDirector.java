@@ -1,5 +1,6 @@
 package com.edu.miu.entity;
 
+import com.edu.miu.entity.key.MediaDirectorKey;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,16 +12,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
-public class Director {
+public class MediaDirector {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private int directorId;
+    @EmbeddedId
+    private MediaDirectorKey id;
 
     @ManyToOne
     @JsonBackReference("media-director")
+    @MapsId("mediaId")
     private Media media;
 
 }

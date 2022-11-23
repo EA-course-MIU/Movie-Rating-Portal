@@ -1,6 +1,6 @@
-package com.edu.miu.config;
+package com.edu.miu.config.kafka;
 
-import com.edu.miu.dto.MediaRatingDto;
+import com.edu.miu.dto.RatingDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -40,17 +40,17 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, MediaRatingDto> mediaRatingConsumerFactory() {
+    public ConsumerFactory<String, RatingDto> removeRatingConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "mediaRatingDto");
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(MediaRatingDto.class));
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "ratingDto");
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(RatingDto.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, MediaRatingDto> mediaRatingKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, MediaRatingDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(mediaRatingConsumerFactory());
+    public ConcurrentKafkaListenerContainerFactory<String, RatingDto> removeRatingKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, RatingDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(removeRatingConsumerFactory());
         return factory;
     }
 }

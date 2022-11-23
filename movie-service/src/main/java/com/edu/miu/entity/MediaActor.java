@@ -1,5 +1,6 @@
 package com.edu.miu.entity;
 
+import com.edu.miu.entity.key.MediaActorKey;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,16 +12,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
-public class Actor {
+public class MediaActor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private int actorId;
+    @EmbeddedId
+    private MediaActorKey id;
 
     @ManyToOne
     @JsonBackReference("media-actor")
+    @MapsId("mediaId")
     private Media media;
 
 }

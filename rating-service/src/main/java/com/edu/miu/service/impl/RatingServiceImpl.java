@@ -6,13 +6,14 @@ import com.edu.miu.dto.RatingReportDto;
 import com.edu.miu.entity.Rating;
 import com.edu.miu.enums.MediaType;
 import com.edu.miu.repository.RatingRepository;
-import com.edu.miu.service.PublisherService;
-import com.edu.miu.service.RabbitMQService;
+import com.edu.miu.publisher.PublisherService;
+import com.edu.miu.publisher.RabbitMQService;
 import com.edu.miu.service.RatingService;
 import com.edu.miu.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    public double getAvgRatingToMedia(int mediaId, MediaType mediaType) {
+        return Utils.round2(ratingRepository.getAvgRatingToMedia(mediaId, mediaType));
+    }
+
+    @Override
     public RatingDto addRating(RatingDto ratingDto) {
         RatingDto result = this.convertTo(ratingRepository.save(this.convertTo((ratingDto))));
         this.sendMessage(result.getMediaId(), result.getMediaType());
@@ -112,6 +118,12 @@ public class RatingServiceImpl implements RatingService {
         return this.convertTo(rating);
     }
 
+    @Override
+    @Transactional
+    public void deleteRatingByMediaId(RatingDto ratingDto) {
+        ratingRepository.deleteAllByMediaIdAndMediaType(ratingDto.getMediaId(), ratingDto.getMediaType());
+    }
+
     private RatingDto convertTo(Rating rating) {
         if (rating == null) {
             return null;
@@ -128,7 +140,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     private void sendMessage(int mediaId, MediaType mediaType) {
-        double avgRating = ratingRepository.getAvgRatingToMedia(mediaId);
+        double avgRating = this.getAvgRatingToMedia(mediaId, mediaType);
         MediaRatingDto mediaRatingDto = new MediaRatingDto(mediaId, avgRating);
         if (mediaType == MediaType.MOVIE) {
             publisherService.sendMessageToMovieService(mediaRatingDto);

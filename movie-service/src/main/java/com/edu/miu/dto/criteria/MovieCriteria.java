@@ -1,7 +1,6 @@
 package com.edu.miu.dto.criteria;
 
 
-import com.edu.miu.entity.Director;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class MovieCriteria {
     private int ownerId;
 
     private int year;
-    private String duration;
+    private int duration;
 
     private List<Integer> directors;
 

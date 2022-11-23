@@ -1,5 +1,6 @@
-package com.edu.miu.config;
+package com.edu.miu.config.rabbitmq;
 
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 @EnableRabbit
-public class RabbitMQConsumerConfig {
+public class CommonConfig {
 
     @Autowired
     private CachingConnectionFactory cachingConnectionFactory;
@@ -28,6 +29,11 @@ public class RabbitMQConsumerConfig {
         RabbitTemplate template = new RabbitTemplate(cachingConnectionFactory);
         template.setMessageConverter(jsonMessageConverter());
         return template;
+    }
+
+    @Bean
+    public Queue removeRatingQueue() {
+        return new Queue("remove-rating-queue", true);
     }
 
 }
