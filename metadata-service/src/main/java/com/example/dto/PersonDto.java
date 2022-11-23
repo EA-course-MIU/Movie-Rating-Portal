@@ -2,8 +2,12 @@ package com.example.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class ProductDto {
+public class PersonDto {
     private int id;
     private String name;
+
+    List <String> positions;
 }

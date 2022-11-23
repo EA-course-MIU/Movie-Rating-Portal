@@ -1,10 +1,13 @@
 package com.example.repo;
 
-import com.example.entity.Review;
+import com.example.entity.Genre;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
 @Repository
-public interface ReviewRepo extends CrudRepository<Review, Integer> {
+public interface GenreRepo extends CrudRepository<Genre,Integer> {
+
+
 }
