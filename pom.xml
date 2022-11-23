@@ -6,7 +6,6 @@
     <modules>
         <module>product-service</module>
         <module>user-service</module>
-<!--        <module>review-service</module>-->
         <module>service-discovery</module>
         <module>config-server</module>
         <module>api-gateway</module>
@@ -15,6 +14,8 @@
         <module>movie-service</module>
         <module>series-service</module>
         <module>rating-service</module>
+        <module>comment-service</module>
+        <module>metadata-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
