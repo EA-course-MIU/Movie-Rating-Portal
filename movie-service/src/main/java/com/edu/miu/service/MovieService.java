@@ -1,5 +1,6 @@
 package com.edu.miu.service;
 
+import com.edu.miu.dto.FullMovieDto;
 import com.edu.miu.dto.criteria.MovieCriteria;
 import com.edu.miu.dto.MovieDto;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface MovieService {
 
-    MovieDto getById(int id);
+    FullMovieDto getById(int id);
 
     List<MovieDto> getByDirectorId(int id);
 

@@ -16,9 +16,11 @@ public class PersonController {
     private final PersonService personService;
 
     @GetMapping
-    public List <PersonDto> getAll(){
+    public List <PersonDto> getAll(@RequestParam(value = "ids", required = false) List<Integer> ids) {
+        if (ids != null && ids.size() > 0) {
+            return personService.getByIds(ids);
+        }
         return personService.getAll ();
-
     }
     @GetMapping(path = "/{id}")
     public PersonDto getById(@PathVariable("id") Integer id){
@@ -43,7 +45,5 @@ public class PersonController {
 //    public List <GenreDto> findByName(@RequestParam String title){
 //        return personService.findByTitle (title);
 //    }
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.edu.miu.controller;
 
+import com.edu.miu.dto.FullMovieDto;
 import com.edu.miu.dto.criteria.MovieCriteria;
 import com.edu.miu.dto.MovieDto;
 import com.edu.miu.service.MovieService;
@@ -21,7 +22,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public MovieDto getById(@PathVariable int id) {
+    public FullMovieDto getById(@PathVariable int id) {
         return movieService.getById(id);
     }
 

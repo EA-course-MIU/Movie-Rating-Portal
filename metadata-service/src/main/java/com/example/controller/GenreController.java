@@ -15,7 +15,10 @@ public class GenreController {
     private final GenreService genreService;
 
     @GetMapping
-    public List <GenreDto> getAll(){
+    public List <GenreDto> getAll(@RequestParam(value = "ids", required = false) List<Integer> ids){
+        if (ids != null && ids.size() > 0) {
+            return genreService.getByIds(ids);
+        }
         return genreService.getAll ();
 
     }
@@ -24,6 +27,7 @@ public class GenreController {
         return genreService.getById (id);
 
     }
+
     @PostMapping
     public GenreDto addGenre(@RequestBody GenreDto genreDto){
         return genreService.addGenre (genreDto);

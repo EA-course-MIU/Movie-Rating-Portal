@@ -9,6 +9,8 @@ public interface GenreService {
     List <GenreDto> getAll();
     GenreDto getById(int id);
 
+    List <GenreDto> getByIds(List<Integer> ids);
+
     GenreDto addGenre (GenreDto genreDto);
 
     GenreDto deleteById (Integer id);

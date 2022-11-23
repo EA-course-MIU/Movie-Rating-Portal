@@ -1,14 +1,15 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.client.MetaDataClient;
 import com.edu.miu.dao.MovieDao;
-import com.edu.miu.dto.RatingDto;
+import com.edu.miu.dto.*;
+import com.edu.miu.dto.criteria.MetaDataCriteria;
 import com.edu.miu.dto.criteria.MovieCriteria;
-import com.edu.miu.dto.MovieDto;
 import com.edu.miu.entity.MediaActor;
 import com.edu.miu.entity.MediaDirector;
 import com.edu.miu.entity.MediaGenre;
 import com.edu.miu.entity.Movie;
-import com.edu.miu.entity.key.MediaActorKey;
+import com.edu.miu.entity.key.*;
 import com.edu.miu.entity.key.MediaDirectorKey;
 import com.edu.miu.entity.key.MediaGenreKey;
 import com.edu.miu.dao.repository.MovieRepository;
@@ -38,9 +39,11 @@ public class MovieServiceImpl implements MovieService {
 
     private final RabbitMQService rabbitMQService;
 
+    private final MetaDataClient metaDataClient;
+
     @Override
-    public MovieDto getById(int id) {
-        return this.convertTo(this.getMovieById(id));
+    public FullMovieDto getById(int id) {
+        return this.convertToFullMovieDto(this.getMovieById(id));
     }
 
     @Override
@@ -183,6 +186,24 @@ public class MovieServiceImpl implements MovieService {
             movie.setMediaGenres(mediaGenres);
         }
         return movie;
+    }
+
+    private FullMovieDto convertToFullMovieDto(Movie movie) {
+        if (movie == null) {
+            return null;
+        }
+        MovieDto movieDto = this.convertTo(movie);
+        FullMovieDto fullMovieDto = modelMapper.map(movieDto, FullMovieDto.class);
+        Object data = metaDataClient.getAll(new MetaDataCriteria(movieDto.getGenreIds(), movieDto.getDirectorIds(), movieDto.getActorIds()));
+
+//        Object data = metaDataClient.getAll(movieDto.getGenreIds(), movieDto.getDirectorIds(), movieDto.getActorIds());
+
+        MetaDataDto metaDataDto = modelMapper.map(data, MetaDataDto.class);;
+        fullMovieDto.setGenres(metaDataDto.getGenres());
+        fullMovieDto.setDirectors(metaDataDto.getDirectors());
+        fullMovieDto.setActors(metaDataDto.getActors());
+
+        return fullMovieDto;
     }
 
 }

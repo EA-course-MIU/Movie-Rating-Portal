@@ -30,6 +30,11 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
+    public List<GenreDto> getByIds(List<Integer> ids) {
+        return genreMapper.toDtos((List<Genre>) genreRepo.findAllById(ids));
+    }
+
+    @Override
     @Transactional
     public GenreDto addGenre (GenreDto genreDto) {
         Genre genre = genreMapper.toEntity (genreDto);

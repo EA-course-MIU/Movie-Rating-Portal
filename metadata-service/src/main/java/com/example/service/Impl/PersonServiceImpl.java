@@ -34,6 +34,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public List<PersonDto> getByIds(List<Integer> ids) {
+        return personMapper.toDtos((List<Person>) personRepo.findAllById(ids));
+    }
+
+    @Override
     @Transactional
     public PersonDto addPerson (PersonDto personDto) {
         Person person = personMapper.toEntity (personDto);

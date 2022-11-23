@@ -11,6 +11,8 @@ public interface PersonService {
 
     PersonDto getById (int id);
 
+    List<PersonDto> getByIds (List<Integer> ids);
+
     PersonDto addPerson (PersonDto personDto);
 
     PersonDto deleteById (Integer id);
