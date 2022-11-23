@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.GenreDto;
 import com.example.dto.PersonDto;
 import com.example.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,10 @@ public class PersonController {
     public PersonDto UpdateById(@PathVariable("id") Integer id,@RequestBody PersonDto personDto){
          return personService.updateById (id,personDto);
     }
+//    @GetMapping("/filter")
+//    public List <GenreDto> findByName(@RequestParam String title){
+//        return personService.findByTitle (title);
+//    }
 
 
 

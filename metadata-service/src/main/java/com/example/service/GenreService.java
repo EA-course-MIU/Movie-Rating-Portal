@@ -15,5 +15,5 @@ public interface GenreService {
 
     GenreDto updateById (Integer id,GenreDto genreDto);
 
-   // List<GenreDto> findByName ();
+    List<GenreDto> findByName (String name);
 }

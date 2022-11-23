@@ -1,6 +1,9 @@
 server:
   port: 5558
 
+  error:
+    include-message: always
+
 spring:
   jpa:
     properties:
@@ -20,7 +23,7 @@ spring:
   datasource:
     password: 1
     username: postgres
-    url: jdbc:postgresql://localhost:5437/postgres
+    url: jdbc:postgresql://localhost:5434/metadata-db
   sql:
     init:
       mode: always
@@ -55,3 +58,4 @@ management:
   endpoint:
     health:
       show-details: always
+

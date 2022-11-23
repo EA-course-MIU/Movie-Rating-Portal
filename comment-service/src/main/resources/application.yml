@@ -1,5 +1,7 @@
 server:
   port: 5557
+  error:
+    include-message: always
 
 spring:
   jpa:
@@ -20,7 +22,7 @@ spring:
   datasource:
     password: 1
     username: postgres
-    url: jdbc:postgresql://localhost:5434/postgres
+    url: jdbc:postgresql://localhost:5434/comment-db
   sql:
     init:
       mode: always

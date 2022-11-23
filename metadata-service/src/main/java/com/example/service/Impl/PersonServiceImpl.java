@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,12 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     public PersonDto addPerson (PersonDto personDto) {
         Person person = personMapper.toEntity (personDto);
-        personRepo.save (person);
+        if(personRepo.findById (person.getId ()).isPresent ()){
+            throw new RuntimeException ("person id :"+person.getId () + "is existing");
+        }
+        else {
+            personRepo.save (person);
+        }
 
         return personMapper.toDto (person);
     }
@@ -53,14 +59,18 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     public PersonDto updateById (Integer id,PersonDto personDto) {
         Person person = personMapper.toEntity (personDto);
-        if(person != null){
-            personRepo.save (person);
+        Person exist = personRepo.findById (id) .orElseThrow (()->new IllegalStateException (
+                "Person id:"+id+"does not exist"));;
+
+        if(exist.getName () !=null &&exist.getName ().length ()>0 && !Objects.equals (exist.getName (),person.getName ())){
+            exist.setName (person.getName ());
         }
-        return personMapper.toDto (person);
+
+        return personMapper.toDto (exist);
     }
 
 //    @Override
-//    public List <PersonDto> findByName () {
-//        return personMapper.toDtos (personRepo ());
+//    public List <PersonDto> findByTitle (String title) {
+//        return personMapper.toDtos (personRepo.findByTitle (title));
 //    }
 }

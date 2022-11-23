@@ -39,9 +39,9 @@ public class GenreController {
        return genreService.updateById (id,genreDto);
     }
 
-//    @GetMapping("/filter")
-//    public List <GenreDto> findByName(){
-//        return genreService.findByName ();
-//    }
+    @GetMapping("/filter")
+    public List <GenreDto> findByName(@RequestParam String name){
+        return genreService.findByName (name);
+    }
 
 }

@@ -16,5 +16,5 @@ public interface PersonService {
     PersonDto deleteById (Integer id);
 
     PersonDto updateById (Integer id,PersonDto personDto);
-    //List<PersonDto> findByName ();
+//    List<PersonDto> findByTitle (String title);
 }
