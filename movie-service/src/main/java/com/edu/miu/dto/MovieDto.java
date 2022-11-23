@@ -30,6 +30,6 @@ public class MovieDto {
 
     private int year;
 
-    private String duration;
+    private int duration;
 
 }

@@ -1,7 +1,7 @@
-package com.edu.miu.service.impl;
+package com.edu.miu.publisher.impl;
 
 import com.edu.miu.dto.MediaRatingDto;
-import com.edu.miu.service.RabbitMQService;
+import com.edu.miu.publisher.RabbitMQService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;

@@ -2,6 +2,7 @@ package com.edu.miu.controller;
 
 import com.edu.miu.dto.RatingDto;
 import com.edu.miu.dto.RatingReportDto;
+import com.edu.miu.enums.MediaType;
 import com.edu.miu.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,11 @@ public class RatingController {
     @GetMapping("/media/{id}/report")
     public List<RatingReportDto> getRatingReportToMedia(@PathVariable int id) {
         return ratingService.getRatingReportForMedia(id);
+    }
+
+    @GetMapping("/media/{id}/avg")
+    public Double getAvgRatingToMedia(@PathVariable int id, @RequestParam MediaType mediaType) {
+        return ratingService.getAvgRatingToMedia(id, mediaType);
     }
 
     @PostMapping

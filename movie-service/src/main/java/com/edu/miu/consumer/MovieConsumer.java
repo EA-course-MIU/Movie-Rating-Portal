@@ -1,4 +1,4 @@
-package com.edu.miu.service;
+package com.edu.miu.consumer;
 
 import com.edu.miu.dto.MediaRatingDto;
 

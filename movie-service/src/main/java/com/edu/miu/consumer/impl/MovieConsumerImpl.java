@@ -1,8 +1,8 @@
-package com.edu.miu.service.impl;
+package com.edu.miu.consumer.impl;
 
+import com.edu.miu.consumer.MovieConsumer;
 import com.edu.miu.dto.MediaRatingDto;
 import com.edu.miu.dto.MovieDto;
-import com.edu.miu.service.MovieConsumer;
 import com.edu.miu.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
