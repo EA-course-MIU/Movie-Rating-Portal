@@ -32,9 +32,9 @@ public class Season {
     @JsonManagedReference
     @Fetch(FetchMode.SUBSELECT)
     private List<Episode> episodes;
-    private int ownerId;
+    private String ownerId;
 
-    public Season(String name, int seasonNumber, int year, Series series, List<Episode> episodes, int ownerId) {
+    public Season(String name, int seasonNumber, int year, Series series, List<Episode> episodes, String ownerId) {
         this.name = name;
         this.seasonNumber = seasonNumber;
         this.year = year;

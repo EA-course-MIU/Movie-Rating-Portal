@@ -26,9 +26,9 @@ public class Episode {
     @Fetch(FetchMode.SELECT)
     private Season season;
 
-    private int ownerId;
+    private String ownerId;
 
-    public Episode(String name, int episodeNumber, int duration, Season season, int ownerId) {
+    public Episode(String name, int episodeNumber, int duration, Season season, String ownerId) {
         this.name = name;
         this.episodeNumber = episodeNumber;
         this.duration = duration;

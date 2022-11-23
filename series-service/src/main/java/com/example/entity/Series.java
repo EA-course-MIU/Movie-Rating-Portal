@@ -16,7 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 public class Series extends Media{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "MEDIA_GEN")
+    @TableGenerator(
+            name = "MEDIA_GEN",
+            table = "ID_Generator",
+            pkColumnName = "name",
+            valueColumnName = "sequence",
+            allocationSize = 1)
     private int id;
     @Enumerated(EnumType.STRING)
     private SeriesStatus status = SeriesStatus.ONGOING;

@@ -15,7 +15,13 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Media {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "MEDIA_GEN")
+    @TableGenerator(
+            name = "MEDIA_GEN",
+            table = "ID_Generator",
+            pkColumnName = "name",
+            valueColumnName = "sequence",
+            allocationSize = 1)
     private int id;
 
     private String title;
@@ -35,5 +41,5 @@ public class Media {
     @JsonManagedReference
     private List<MediaActor> actorIds;
 
-    private int ownerId;
+    private String ownerId;
 }

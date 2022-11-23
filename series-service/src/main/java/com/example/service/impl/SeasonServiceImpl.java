@@ -7,6 +7,7 @@ import com.example.mapper.SeasonMapper;
 import com.example.repo.SeasonRepo;
 import com.example.repo.SeriesRepo;
 import com.example.service.SeasonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,14 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 @Service
+@RequiredArgsConstructor
 public class SeasonServiceImpl implements SeasonService {
-    @Autowired
-    private SeasonRepo seasonRepo;
-    @Autowired
-    private SeriesRepo seriesRepo;
-    @Autowired
-    private SeasonMapper seasonMapper;
+
+    private final SeasonRepo seasonRepo;
+
+    private final SeriesRepo seriesRepo;
+
+    private final SeasonMapper seasonMapper;
 
     @Override
     public SeasonDto getById(int seasonId) {
@@ -37,7 +39,7 @@ public class SeasonServiceImpl implements SeasonService {
     @Override
     public SeasonDto create(int seriesId, RequestSeasonDto seasonDto) {
         var series = seriesRepo.findById(seriesId).get();
-        var season = new Season(seasonDto.getName(), seasonDto.getSeasonNumber(), seasonDto.getYear(), series, new ArrayList<>(), 1);
+        var season = new Season(seasonDto.getName(), seasonDto.getSeasonNumber(), seasonDto.getYear(), series, new ArrayList<>(), "1");
         series.getSeasons().add(season);
         seasonRepo.save(season);
         return seasonMapper.toDto(season);
