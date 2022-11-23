@@ -26,10 +26,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SeriesServiceImpl implements SeriesService {
-    @Autowired
-    private SeriesRepo seriesRepo;
-    @Autowired
-    private SeriesMapper seriesMapper;
+
+    private final SeriesRepo seriesRepo;
+
+    private final SeriesMapper seriesMapper;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -80,12 +80,16 @@ public class SeriesServiceImpl implements SeriesService {
         newSeries.setTitle(series.getTitle());
         newSeries.setDescription(series.getDescription());
         newSeries.setStatus(series.getStatus());
+        newSeries.setOwnerId("1");
         seriesRepo.save(newSeries);
         return seriesMapper.toDto(newSeries);
     }
 
     @Override
     public List<SeriesDto> filter(FilterDto filterDto) {
+        if (!filterDto.hasFilter()) {
+            return new ArrayList<>();
+        }
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Series> query = criteriaBuilder.createQuery(Series.class);
 
@@ -109,7 +113,7 @@ public class SeriesServiceImpl implements SeriesService {
         }
 
         List<Integer> genreIds = filterDto.getValidGenreIds();
-        if (genreIds.size() > 0) {
+        if (!genreIds.isEmpty()) {
             Join<Series, MediaGenre> genreJoin = root.join("genres");
             CriteriaBuilder.In<Integer> inClause = criteriaBuilder.in(genreJoin.get("mediaGenreKey").get("genreId"));
             for (int id : genreIds) {
@@ -119,7 +123,7 @@ public class SeriesServiceImpl implements SeriesService {
         }
 
         List<Integer> directorIds = filterDto.getValidDirectorIds();
-        if (directorIds.size() > 0) {
+        if (!directorIds.isEmpty()) {
             Join<Series, MediaGenre> directorJoin = root.join("directorIds");
             CriteriaBuilder.In<Integer> inClause = criteriaBuilder.in(directorJoin.get("mediaPersonKey").get("personId"));
             for (int id : directorIds) {
@@ -129,7 +133,7 @@ public class SeriesServiceImpl implements SeriesService {
         }
 
         List<Integer> actorIds = filterDto.getValidActorIds();
-        if (actorIds.size() > 0) {
+        if (!actorIds.isEmpty()) {
             Join<Series, MediaGenre> actorJoin = root.join("actorIds");
             CriteriaBuilder.In<Integer> inClause = criteriaBuilder.in(actorJoin.get("mediaPersonKey").get("personId"));
             for (int id : actorIds) {
@@ -147,7 +151,7 @@ public class SeriesServiceImpl implements SeriesService {
     @Override
     public SeriesDto updateRating(int id, double rating) {
         var series = seriesRepo.findById(id).orElse(null);
-        if(series == null){
+        if (series == null) {
             return null;
         }
         series.setRating(rating);

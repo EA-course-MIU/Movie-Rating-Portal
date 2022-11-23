@@ -8,19 +8,21 @@ import com.example.repo.EpisodeRepo;
 import com.example.repo.SeasonRepo;
 import com.example.repo.SeriesRepo;
 import com.example.service.EpisodeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 @Service
+@RequiredArgsConstructor
 public class EpisodeServiceImpl implements EpisodeService {
-    @Autowired
-    private EpisodeRepo episodeRepo;
-    @Autowired
-    private EpisodeMapper episodeMapper;
-    @Autowired
-    private SeasonRepo seasonRepo;
+
+    private final EpisodeRepo episodeRepo;
+
+    private final EpisodeMapper episodeMapper;
+
+    private final SeasonRepo seasonRepo;
     @Override
     public EpisodeDto getById(int id) {
         return episodeMapper.toDto(episodeRepo.findById(id).get());
@@ -35,7 +37,7 @@ public class EpisodeServiceImpl implements EpisodeService {
     @Override
     public EpisodeDto save(int seasonId, RequestEpisodeDto episodeDto) {
         var season = seasonRepo.findById(seasonId).get();
-        var newEpisode = new Episode(episodeDto.getName(), episodeDto.getEpisodeNumber(), episodeDto.getDuration(), season, 1);
+        var newEpisode = new Episode(episodeDto.getName(), episodeDto.getEpisodeNumber(), episodeDto.getDuration(), season, "1");
         episodeRepo.save(newEpisode);
         return episodeMapper.toDto(newEpisode);
     }
