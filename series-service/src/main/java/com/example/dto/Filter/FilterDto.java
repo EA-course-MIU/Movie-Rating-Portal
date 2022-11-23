@@ -42,4 +42,8 @@ public class FilterDto {
     public boolean isValidDuration() {
         return duration != null && duration > 0;
     }
+
+    public boolean hasFilter() {
+        return isValidYear() || isValidRating() || !getValidGenreIds().isEmpty() || !getValidDirectorIds().isEmpty() || !getValidActorIds().isEmpty() || isValidDuration();
+    }
 }
