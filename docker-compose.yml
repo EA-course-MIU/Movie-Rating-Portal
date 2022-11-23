@@ -48,6 +48,14 @@ services:
       ports:
         - "5437:5432"
       restart: unless-stopped
+  favorite-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5438:5432"
+    restart: unless-stopped
 
 
   zipkin:
