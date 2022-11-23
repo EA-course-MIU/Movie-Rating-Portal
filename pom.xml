@@ -16,6 +16,7 @@
         <module>rating-service</module>
         <module>comment-service</module>
         <module>metadata-service</module>
+        <module>favorite-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
