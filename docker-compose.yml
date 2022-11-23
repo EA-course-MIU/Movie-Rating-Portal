@@ -40,6 +40,15 @@ services:
     ports:
       - "5436:5432"
     restart: unless-stopped
+  metadata-db:
+      image: postgres
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 1
+      ports:
+        - "5437:5432"
+      restart: unless-stopped
+
 
   zipkin:
     image: openzipkin/zipkin
