@@ -14,15 +14,15 @@ public class CommentDto {
     private Date updateDate;
     private String comment;
 
-//    private int userId;
-    private UserDto user;
+    private int userId;
     private int mediaId;
     private MediaType mediaType;
 
-    public CommentDto(Comment comment,List<UserDto> users){
-        this.id = comment.getId();
-        this.comment = comment.getComment();
-        this.user = users.stream().filter(u -> u.getId() == comment.getUserId ()).findFirst().orElse(null);
-    }
+//    public CommentDto(Comment comment,List<UserDto> users,List<MediaDto> medias){
+//        this.id = comment.getId();
+//        this.comment = comment.getComment();
+//        this.user = users.stream().filter(u -> u.getId() == comment.getUserId ()).findFirst().orElse(null);
+//        this.media = medias.stream().filter(m -> m.getId () == comment.getUserId ()).findFirst().orElse(null);
+//    }
 
 }

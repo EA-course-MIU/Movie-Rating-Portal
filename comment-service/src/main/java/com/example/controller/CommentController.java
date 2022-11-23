@@ -12,35 +12,36 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/comments")
 public class CommentController {
-
     private final CommentService commentService;
 
-    @GetMapping()
-    public List <CommentDto> getAll () {
-    return commentService.findAll ();
-}
-
-    @GetMapping(path = "/{id}")
-    public CommentDto getCommentById (@PathVariable("id") Integer id) {
-        return commentService.findById (id);
+    @GetMapping("/users/{userId}")
+    public List <CommentDto> findByUserId (@PathVariable("userId") int userId) {
+    return commentService.findByUserId (userId);
+    }
+    @GetMapping("/media/{mediaId}")
+    public List <CommentDto> findByMediaId  (@PathVariable("mediaId") int mediaId) {
+        return commentService.findByMediaId (mediaId);
     }
 
-    @PostMapping()
-    public CommentDto addComment (@RequestBody CommentDto commentDto) {
-
-        return commentService.addComment (commentDto);
+    @GetMapping("/filter")
+    public List <CommentDto> getByUserAndMedia (@RequestParam(required = false) int userId,
+                                                @RequestParam(required = false) int mediaId) {
+        return commentService.findByUserAndMedia (userId,mediaId);
+    }
+    @PostMapping("/users/{id}")
+    public CommentDto addByUserId (@PathVariable("id") int id,@RequestBody CommentDto commentDto) {
+        return commentService.addByUserId (id,commentDto);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public CommentDto deleteComment (@PathVariable("id") Integer id)
+    @DeleteMapping("/users/{id}")
+    public CommentDto deleteByUserId (@PathVariable("id") int id) {
+        return commentService.deleteByUserId (id);
+    }
+
+    @PutMapping(path = "/users/{id}")
+    public CommentDto updateByUserId (@PathVariable("id") Integer id,@RequestBody CommentDto commentDto)
     {
-        return commentService.deleteComment (id);
-    }
-
-    @PutMapping(path = "/{id}")
-    public CommentDto updateComment (@PathVariable("id") Integer id,@RequestBody CommentDto commentDto)
-    {
-        return commentService.updateComment (id,commentDto);
+        return commentService.updateByUserId (id,commentDto);
     }
 
 

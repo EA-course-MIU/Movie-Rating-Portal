@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import com.example.enums.MediaType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,9 +17,10 @@ public class Comment {
     private Date createdDate;
     private Date updateDate;
     private String comment;
-
     private int userId;
     private int mediaId;
+
+
     @Enumerated(EnumType.STRING)
     private MediaType mediaType;
 

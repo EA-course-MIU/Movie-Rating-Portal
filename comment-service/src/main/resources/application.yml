@@ -20,7 +20,7 @@ spring:
   datasource:
     password: 1
     username: postgres
-    url: jdbc:postgresql://localhost:6666/comment-service
+    url: jdbc:postgresql://localhost:5434/postgres
   sql:
     init:
       mode: always

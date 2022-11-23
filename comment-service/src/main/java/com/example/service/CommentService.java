@@ -6,13 +6,15 @@ import com.example.entity.Comment;
 import java.util.List;
 
 public interface CommentService {
-    public List <CommentDto> findAll ();
+    List<CommentDto> findByUserId (int id);
 
-    public CommentDto findById (Integer id);
+    List<CommentDto> findByMediaId (int id);
 
-    public CommentDto addComment (CommentDto commentDto);
+    List<CommentDto> findByUserAndMedia (int userId,int mediaId);
 
-    public CommentDto deleteComment (Integer id);
+    CommentDto deleteByUserId (int id);
 
-    public CommentDto updateComment (Integer id,CommentDto commentDto);
+    CommentDto addByUserId (int id,CommentDto commentDto);
+
+    CommentDto updateByUserId (Integer id,CommentDto commentDto);
 }
