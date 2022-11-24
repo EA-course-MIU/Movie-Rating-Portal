@@ -4,6 +4,7 @@ import com.edu.miu.dto.FullMovieDto;
 import com.edu.miu.dto.criteria.MovieCriteria;
 import com.edu.miu.dto.MovieDto;
 import com.edu.miu.service.MovieService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/movies")
 @RequiredArgsConstructor
+@Tag(name = "Movie", description = "Business Movie Services")
 public class MovieController {
 
     private final MovieService movieService;
