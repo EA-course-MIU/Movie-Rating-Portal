@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import com.example.dto.ReviewDto;
-import com.example.entity.Review;
 import com.example.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

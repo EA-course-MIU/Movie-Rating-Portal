@@ -1,4 +1,4 @@
-package com.example.config;
+package com.edu.miu.config;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;

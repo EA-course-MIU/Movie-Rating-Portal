@@ -1,4 +1,4 @@
-package com.example;
+package com.edu.miu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,11 +7,13 @@ import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import org.springframework.cloud.gateway.discovery.DiscoveryClientRouteDefinitionLocator;
 import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
+
 @SpringBootApplication
 @EnableDiscoveryClient
-public class APIGateway {
+public class APIGatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(APIGateway.class, args);
+        SpringApplication.run(APIGatewayApplication.class, args);
     }
 
     @Bean
@@ -19,4 +21,5 @@ public class APIGateway {
         dlp.setLowerCaseServiceId(true);
         return new DiscoveryClientRouteDefinitionLocator(dc, dlp);
     }
+
 }

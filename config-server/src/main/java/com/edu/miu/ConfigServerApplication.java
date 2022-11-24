@@ -1,4 +1,4 @@
-package com.example;
+package com.edu.miu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @EnableConfigServer
 @EnableEurekaClient
 @EnableDiscoveryClient
-public class ConfigServer {
+public class ConfigServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ConfigServer.class, args);
+        SpringApplication.run(ConfigServerApplication.class, args);
     }
 }

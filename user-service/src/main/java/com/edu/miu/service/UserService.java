@@ -1,6 +1,6 @@
-package com.example.service;
+package com.edu.miu.service;
 
-import com.example.entity.User;
+import com.edu.miu.entity.User;
 
 public interface UserService {
     Iterable<User> getAll();

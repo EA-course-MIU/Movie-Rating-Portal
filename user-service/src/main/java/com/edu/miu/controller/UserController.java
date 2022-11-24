@@ -1,15 +1,12 @@
-package com.example.controller;
+package com.edu.miu.controller;
 
-import com.example.dto.ProductDto;
-import com.example.entity.User;
-import com.example.service.ProductClient;
-import com.example.service.UserService;
+import com.edu.miu.entity.User;
+import com.edu.miu.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @RestController

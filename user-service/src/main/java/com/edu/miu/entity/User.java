@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.edu.miu.entity;
 
 import lombok.Data;
 

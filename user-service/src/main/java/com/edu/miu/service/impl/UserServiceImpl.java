@@ -1,8 +1,8 @@
-package com.example.service;
+package com.edu.miu.service.impl;
 
-import com.example.dto.ProductDto;
-import com.example.entity.User;
-import com.example.repo.UserRepo;
+import com.edu.miu.entity.User;
+import com.edu.miu.repo.UserRepo;
+import com.edu.miu.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
@@ -13,9 +13,7 @@ import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
-    @Autowired
-    private ProductClient productClient;
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
@@ -24,13 +22,9 @@ public class UserServiceImpl implements UserService{
     public Iterable<User> getAll() {
 
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
-        var products = circuitBreaker.run(() -> productClient.getAllProducts(),
-                throwable -> getDefaultProducts());
+//        var products = circuitBreaker.run(() -> productClient.getAllProducts(),
+//                throwable -> getDefaultProducts());
         return userRepo.findAll();
-    }
-
-    public Iterable<ProductDto> getDefaultProducts(){
-        return new ArrayList<>();
     }
 
 }
