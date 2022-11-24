@@ -13,8 +13,8 @@ public class SeriesDto {
     private String title;
     private String description;
     private double rating;
-    private List<MediaDirector> directorIds;
-    private List<MediaDirector> actorIds;
-    private List<MediaGenre> genres;
+    private List<PersonDto> directors;
+    private List<PersonDto> actors;
+    private List<GenreDto> genres;
     private SeriesStatus status;
 }
