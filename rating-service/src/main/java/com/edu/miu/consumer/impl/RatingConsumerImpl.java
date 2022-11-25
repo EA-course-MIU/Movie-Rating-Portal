@@ -15,9 +15,9 @@ public class RatingConsumerImpl implements RatingConsumer {
     private final RatingService ratingService;
 
     @KafkaListener(
-            topics = "remove-rating-topic",
+            topics = "remove-movie-topic",
             containerFactory = "removeRatingKafkaListenerContainerFactory",
-            groupId = "remove-rating-topic")
+            groupId = "remove-movie-topic")
     @Override
     public void receiveMessageFromMovie(RatingDto ratingDto) {
         if (ratingDto.getMediaId() > 0 && ratingDto.getMediaType() != null) {
@@ -27,7 +27,7 @@ public class RatingConsumerImpl implements RatingConsumer {
     }
 
     @Override
-    @RabbitListener(queues = {"remove-rating-queue"})
+    @RabbitListener(queues = {"remove-movie-queue"})
     public void receiveRabbitMessageFromMovie(RatingDto ratingDto) {
         if (ratingDto.getMediaId() > 0 && ratingDto.getMediaType() != null) {
             ratingService.deleteRatingByMediaId(ratingDto);

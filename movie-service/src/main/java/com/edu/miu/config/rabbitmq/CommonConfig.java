@@ -32,8 +32,8 @@ public class CommonConfig {
     }
 
     @Bean
-    public Queue removeRatingQueue() {
-        return new Queue("remove-rating-queue", true);
+    public Queue removeMovieQueue() {
+        return new Queue("remove-movie-queue", true);
     }
 
 }

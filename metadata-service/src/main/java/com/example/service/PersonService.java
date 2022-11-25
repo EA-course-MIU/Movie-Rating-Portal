@@ -13,6 +13,10 @@ public interface PersonService {
 
     List<PersonDto> getByIds (List<Integer> ids);
 
+    List<PersonDto> getByIdsAndType(List<Integer> ids, String position);
+
+    List<PersonDto> getByPosition(String position);
+
     PersonDto addPerson (PersonDto personDto);
 
     PersonDto deleteById (Integer id);

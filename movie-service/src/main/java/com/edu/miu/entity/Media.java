@@ -38,15 +38,15 @@ public abstract class Media implements Serializable {
     @ColumnDefault("false")
     private boolean isDisabled = false;
 
-    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("media-genre")
     private List<MediaGenre> mediaGenres;
 
-    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("media-director")
     private List<MediaDirector> mediaDirectors;
 
-    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("media-actor")
     private List<MediaActor> mediaActors;
 

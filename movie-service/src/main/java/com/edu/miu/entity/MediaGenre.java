@@ -17,7 +17,7 @@ public class MediaGenre {
     @EmbeddedId
     private MediaGenreKey id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference("media-genre")
     @MapsId("mediaId")
     private Media media;

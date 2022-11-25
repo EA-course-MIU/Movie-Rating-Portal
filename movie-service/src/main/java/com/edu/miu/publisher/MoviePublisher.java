@@ -4,6 +4,6 @@ import com.edu.miu.dto.RatingDto;
 
 public interface MoviePublisher {
 
-    void sendMessageToRemoveRating(RatingDto ratingDto);
+    void sendRemovedMovieMessage(RatingDto ratingDto);
 
 }

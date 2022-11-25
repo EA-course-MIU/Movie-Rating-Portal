@@ -13,7 +13,7 @@ public class MoviePublisherImpl implements MoviePublisher {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
-    public void sendMessageToRemoveRating(RatingDto ratingDto) {
-        kafkaTemplate.send("remove-rating-topic", ratingDto);
+    public void sendRemovedMovieMessage(RatingDto ratingDto) {
+        kafkaTemplate.send("remove-movie-topic", ratingDto);
     }
 }

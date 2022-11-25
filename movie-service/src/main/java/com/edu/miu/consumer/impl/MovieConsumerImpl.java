@@ -1,6 +1,7 @@
 package com.edu.miu.consumer.impl;
 
 import com.edu.miu.consumer.MovieConsumer;
+import com.edu.miu.dto.FullMovieDto;
 import com.edu.miu.dto.MediaRatingDto;
 import com.edu.miu.dto.MovieDto;
 import com.edu.miu.service.MovieService;
@@ -23,8 +24,7 @@ public class MovieConsumerImpl implements MovieConsumer {
     public void receiveMessageFromRating(MediaRatingDto mediaRatingDto) {
         MovieDto movieDto = new MovieDto();
         movieDto.setAverageRating(mediaRatingDto.getAverageRating());
-        MovieDto movieDto1 = movieService.updateMovie(mediaRatingDto.getMediaId(), movieDto);
-        System.out.println(movieDto1);
+        System.out.println(movieService.updateMovie(mediaRatingDto.getMediaId(), movieDto));
     }
 
     @Override
@@ -32,8 +32,7 @@ public class MovieConsumerImpl implements MovieConsumer {
     public void receiveRabbitMessageFromRating(MediaRatingDto mediaRatingDto) {
         MovieDto movieDto = new MovieDto();
         movieDto.setAverageRating(mediaRatingDto.getAverageRating());
-        MovieDto movieDto1 = movieService.updateMovie(mediaRatingDto.getMediaId(), movieDto);
-        System.out.println(movieDto1);
+        System.out.println(movieService.updateMovie(mediaRatingDto.getMediaId(), movieDto));
     }
 
 

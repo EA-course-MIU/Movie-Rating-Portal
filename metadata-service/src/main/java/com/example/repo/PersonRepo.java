@@ -13,5 +13,7 @@ public interface PersonRepo extends CrudRepository<Person,Integer> {
 //    @Query("SELECT p FROM Person p WHERE p.positions = ?1")
 //    List<Genre> findAllByPositions();
 
+    List<Person> findAllByIdIsInAndPositionsTitleEqualsIgnoreCase(List<Integer> ids, String title);
 
+    List<Person> findAllByPositionsTitleEqualsIgnoreCase(String title);
 }

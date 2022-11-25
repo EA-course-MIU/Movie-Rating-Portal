@@ -20,7 +20,7 @@ public class RabbitMQTopicConfig {
         return BindingBuilder
                 .bind(removeRatingQueue)
                 .to(topicExchange)
-                .with("remove-rating-queue");
+                .with("remove-movie-queue");
     }
 
 }

@@ -17,7 +17,7 @@ public class MediaDirector {
     @EmbeddedId
     private MediaDirectorKey id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference("media-director")
     @MapsId("mediaId")
     private Media media;

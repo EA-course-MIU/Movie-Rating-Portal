@@ -17,7 +17,7 @@ public class MediaActor {
     @EmbeddedId
     private MediaActorKey id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference("media-actor")
     @MapsId("mediaId")
     private Media media;

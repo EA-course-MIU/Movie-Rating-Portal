@@ -20,9 +20,9 @@ public interface MovieService {
 
     List<MovieDto> getAll();
 
-    MovieDto addMovie(MovieDto movieDto);
+    FullMovieDto addMovie(MovieDto movieDto);
 
-    MovieDto updateMovie(int id, MovieDto movieDto);
+    FullMovieDto updateMovie(int id, MovieDto movieDto);
 
     MovieDto deleteMovie(int id);
     

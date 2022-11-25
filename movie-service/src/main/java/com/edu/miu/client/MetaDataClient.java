@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "METADATA-SERVICE", url = "http://localhost:5558", path = "/metadata")
+@FeignClient(name = "METADATA-SERVICE")
 public interface MetaDataClient {
 
 //    @SpringQueryMap
@@ -21,6 +21,14 @@ public interface MetaDataClient {
 //                                    @RequestParam List<Integer> actorIds);
 
 
-    @GetMapping
+    @GetMapping("/metadata")
     Object getAll(@SpringQueryMap MetaDataCriteria metaDataCriteria);
+
+    @GetMapping("/genres")
+    List<Object> getGenres(@RequestParam(value = "ids", required = false) List<Integer> ids);
+
+    @GetMapping("/persons")
+    List<Object> getPersons(@RequestParam(value="position", required = false) String position,
+                      @RequestParam(value = "ids", required = false) List<Integer> ids);
+
 }

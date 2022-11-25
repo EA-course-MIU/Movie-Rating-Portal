@@ -39,6 +39,16 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public List<PersonDto> getByIdsAndType(List<Integer> ids, String position) {
+        return personMapper.toDtos(personRepo.findAllByIdIsInAndPositionsTitleEqualsIgnoreCase(ids, position));
+    }
+
+    @Override
+    public List<PersonDto> getByPosition(String position) {
+        return personMapper.toDtos(personRepo.findAllByPositionsTitleEqualsIgnoreCase(position));
+    }
+
+    @Override
     @Transactional
     public PersonDto addPerson (PersonDto personDto) {
         Person person = personMapper.toEntity (personDto);

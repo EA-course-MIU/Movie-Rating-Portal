@@ -12,7 +12,8 @@ import com.edu.miu.entity.Movie;
 import com.edu.miu.entity.key.*;
 import com.edu.miu.entity.key.MediaDirectorKey;
 import com.edu.miu.entity.key.MediaGenreKey;
-import com.edu.miu.dao.repository.MovieRepository;
+import com.edu.miu.enums.PositionType;
+import com.edu.miu.repository.MovieRepository;
 import com.edu.miu.enums.MediaType;
 import com.edu.miu.publisher.MoviePublisher;
 import com.edu.miu.publisher.RabbitMQService;
@@ -84,16 +85,44 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public MovieDto addMovie(MovieDto movieDto) {
-        return this.convertTo(movieRepository.save(this.convertTo((movieDto))));
+    public FullMovieDto addMovie(MovieDto movieDto) {
+        Movie movie = movieRepository.save(this.convertTo((this.validateMetadata(movieDto))));
+        return this.convertToFullMovieDto(movie);
     }
 
+    private MovieDto validateMetadata(MovieDto movieDto) {
+        List<Integer> genreIds = movieDto.getGenreIds();
+        List<Integer> directorIds = movieDto.getDirectorIds();
+        List<Integer> actorIds = movieDto.getActorIds();
+
+        if (genreIds != null && genreIds.size() > 0) {
+            List<Object> genres = metaDataClient.getGenres(genreIds);
+            List<GenreDto> genreDtoList = genres.stream().map(g -> modelMapper.map(g, GenreDto.class)).toList();
+            movieDto.setGenreIds(genreDtoList.stream().map(GenreDto::getId).toList());
+        }
+
+        if (directorIds != null && directorIds.size() > 0) {
+            List<Object> directors = metaDataClient.getPersons(PositionType.DIRECTOR.name(), directorIds);
+            List<PersonDto> persons = directors.stream().map(p -> modelMapper.map(p, PersonDto.class)).toList();
+            movieDto.setDirectorIds(persons.stream().map(PersonDto::getId).toList());
+        }
+
+        if (actorIds != null && actorIds.size() > 0) {
+            List<Object> actors = metaDataClient.getPersons(PositionType.ACTOR.name(), actorIds);
+            List<PersonDto> persons = actors.stream().map(p -> modelMapper.map(p, PersonDto.class)).toList();
+            movieDto.setDirectorIds(persons.stream().map(PersonDto::getId).toList());
+        }
+
+        return movieDto;
+    }
     @Override
     @Transactional
-    public MovieDto updateMovie(int id, MovieDto movieDto) {
+    public FullMovieDto updateMovie(int id, MovieDto movieDto) {
         Movie movie = this.getMovieById(id);
 
         if (movie != null) {
+            movieDto = this.validateMetadata(movieDto);
+
             if (movieDto.getDescription() != null && !movie.getDescription().equals(movieDto.getDescription())) {
                 movie.setDescription(movieDto.getDescription());
             }
@@ -112,9 +141,96 @@ public class MovieServiceImpl implements MovieService {
             if (movieDto.getDuration() > 0 && !movie.getDuration().equals(movieDto.getDuration())) {
                 movie.setDuration(movieDto.getDuration());
             }
+
+            this.updateMediaGenre(movie, movieDto);
+            this.updateMediaDirectors(movie, movieDto);
+            this.updateMediaActors(movie, movieDto);
         }
 
-        return this.convertTo(movieRepository.save(movie));
+        return this.convertToFullMovieDto(movieRepository.save(movie));
+    }
+
+    private void updateMediaGenre(Movie movie, MovieDto movieDto) {
+        if (movieDto.getGenreIds() != null && movieDto.getGenreIds().size() > 0) {
+            List<MediaGenre> mediaGenres = movie.getMediaGenres();
+            List<Integer> genreIds = movieDto.getGenreIds();
+            List<MediaGenre> removedMediaGenres = mediaGenres.stream()
+                    .filter(g -> !genreIds.contains(g.getId().getGenreId()))
+                    .toList();
+            List<MediaGenre> addedMediaGenres = genreIds.stream()
+                    .filter(genreId -> !mediaGenres.stream()
+                            .filter(g -> g.getId().getGenreId() == genreId)
+                            .findAny().isPresent())
+                    .map(genreId -> {
+                        MediaGenre mediaGenre = new MediaGenre();
+                        mediaGenre.setMedia(movie);
+                        mediaGenre.setId(new MediaGenreKey(movie.getId(), genreId));
+                        return mediaGenre;
+                    })
+                    .toList();
+            if (removedMediaGenres != null && removedMediaGenres.size() > 0) {
+                movie.getMediaGenres().removeAll(removedMediaGenres);
+            }
+            if (addedMediaGenres != null && addedMediaGenres.size() > 0) {
+                movie.getMediaGenres().addAll(addedMediaGenres);
+            }
+        }
+    }
+
+    private void updateMediaDirectors(Movie movie, MovieDto movieDto) {
+        if (movieDto.getDirectorIds() != null && movieDto.getDirectorIds().size() > 0) {
+            List<MediaDirector> mediaDirectors = movie.getMediaDirectors();
+            List<Integer> directorIds = movieDto.getDirectorIds();
+
+            List<MediaDirector> removedMediaDirectors = mediaDirectors.stream()
+                    .filter(g -> !directorIds.contains(g.getId().getDirectorId()))
+                    .toList();
+            List<MediaDirector> addedMediaDirectors = directorIds.stream()
+                    .filter(directorId -> !mediaDirectors.stream()
+                            .filter(g -> g.getId().getDirectorId() == directorId)
+                            .findAny().isPresent())
+                    .map(directorId -> {
+                        MediaDirector mediaDirector = new MediaDirector();
+                        mediaDirector.setMedia(movie);
+                        mediaDirector.setId(new MediaDirectorKey(movie.getId(), directorId));
+                        return mediaDirector;
+                    })
+                    .toList();
+            if (removedMediaDirectors != null && removedMediaDirectors.size() > 0) {
+                movie.getMediaDirectors().removeAll(removedMediaDirectors);
+            }
+            if (addedMediaDirectors != null && addedMediaDirectors.size() > 0) {
+                movie.getMediaDirectors().addAll(addedMediaDirectors);
+            }
+        }
+    }
+
+    private void updateMediaActors(Movie movie, MovieDto movieDto) {
+        if (movieDto.getActorIds() != null && movieDto.getActorIds().size() > 0) {
+            List<MediaActor> mediaActors = movie.getMediaActors();
+            List<Integer> actorIds = movieDto.getActorIds();
+
+            List<MediaActor> removedMediaActors = mediaActors.stream()
+                    .filter(g -> !actorIds.contains(g.getId().getActorId()))
+                    .toList();
+            List<MediaActor> addedMediaActors = actorIds.stream()
+                    .filter(actorId -> !mediaActors.stream()
+                            .filter(g -> g.getId().getActorId() == actorId)
+                            .findAny().isPresent())
+                    .map(actorId -> {
+                        MediaActor mediaActor = new MediaActor();
+                        mediaActor.setMedia(movie);
+                        mediaActor.setId(new MediaActorKey(movie.getId(), actorId));
+                        return mediaActor;
+                    })
+                    .toList();
+            if (removedMediaActors != null && removedMediaActors.size() > 0) {
+                movie.getMediaActors().removeAll(removedMediaActors);
+            }
+            if (addedMediaActors != null && addedMediaActors.size() > 0) {
+                movie.getMediaActors().addAll(addedMediaActors);
+            }
+        }
     }
 
     @Override
@@ -128,9 +244,9 @@ public class MovieServiceImpl implements MovieService {
             ratingDto.setMediaId(id);
             ratingDto.setMediaType(MediaType.MOVIE);
 
-            moviePublisher.sendMessageToRemoveRating(ratingDto);
+            moviePublisher.sendRemovedMovieMessage(ratingDto);
 
-//            rabbitMQService.sendExchange("movie-topic-exchange", "remove-rating-queue", ratingDto);
+//            rabbitMQService.sendExchange("movie-topic-exchange", "remove-movie-queue", ratingDto);
         }
 
         return this.convertTo(movie);
@@ -198,7 +314,7 @@ public class MovieServiceImpl implements MovieService {
 
 //        Object data = metaDataClient.getAll(movieDto.getGenreIds(), movieDto.getDirectorIds(), movieDto.getActorIds());
 
-        MetaDataDto metaDataDto = modelMapper.map(data, MetaDataDto.class);;
+        MetaDataDto metaDataDto = modelMapper.map(data, MetaDataDto.class);
         fullMovieDto.setGenres(metaDataDto.getGenres());
         fullMovieDto.setDirectors(metaDataDto.getDirectors());
         fullMovieDto.setActors(metaDataDto.getActors());

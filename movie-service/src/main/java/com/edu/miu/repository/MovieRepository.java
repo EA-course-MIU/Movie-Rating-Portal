@@ -1,4 +1,4 @@
-package com.edu.miu.dao.repository;
+package com.edu.miu.repository;
 
 import com.edu.miu.entity.Movie;
 import org.springframework.data.repository.CrudRepository;

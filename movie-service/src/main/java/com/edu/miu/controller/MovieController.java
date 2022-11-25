@@ -49,12 +49,12 @@ public class MovieController {
     }
 
     @PostMapping
-    public MovieDto addMovie(@RequestBody MovieDto movieDto) {
+    public FullMovieDto addMovie(@RequestBody MovieDto movieDto) {
         return movieService.addMovie(movieDto);
     }
 
     @PutMapping("/{id}")
-    public MovieDto updateMovie(@PathVariable int id, @RequestBody MovieDto movieDto) {
+    public FullMovieDto updateMovie(@PathVariable int id, @RequestBody MovieDto movieDto) {
         return movieService.updateMovie(id, movieDto);
     }
 
