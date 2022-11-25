@@ -23,7 +23,7 @@ spring:
   datasource:
     password: 1
     username: postgres
-    url: jdbc:postgresql://localhost:5434/postgres
+    url: jdbc:postgresql://localhost:5437/postgres
   sql:
     init:
       mode: always

@@ -9,8 +9,6 @@ import com.miu.mapper.FavoriteMapper;
 import com.miu.repo.FavoriteListRepo;
 import com.miu.service.FavoriteService;
 import com.miu.service.MediaClient;
-import com.miu.service.MovieClient;
-import com.miu.service.SeriesClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +70,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Transactional
     @Override
     public FavoriteListDto removeFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia) {
-
         var favoriteList = favoriteListRepo.findById(favoriteListId).orElse(null);
         if (favoriteList == null || !requestFavoriteMedia.isValid()) return null;
         favoriteList.getFavoriteMediaList().remove(new FavoriteMedia(requestFavoriteMedia.getMediaId(), requestFavoriteMedia.getMediaType(), favoriteList));

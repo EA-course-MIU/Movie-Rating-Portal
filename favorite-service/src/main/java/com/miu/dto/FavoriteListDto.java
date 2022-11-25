@@ -10,5 +10,4 @@ public class FavoriteListDto {
     private String title;
     private String userId;
     private List<Object> medias;
-//    private List<FavoriteMediaDto> favoriteMediaList;
 }
