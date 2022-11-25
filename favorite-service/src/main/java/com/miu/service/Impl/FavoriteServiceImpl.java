@@ -8,6 +8,9 @@ import com.miu.entity.FavoriteMedia;
 import com.miu.mapper.FavoriteMapper;
 import com.miu.repo.FavoriteListRepo;
 import com.miu.service.FavoriteService;
+import com.miu.service.MediaClient;
+import com.miu.service.MovieClient;
+import com.miu.service.SeriesClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,9 @@ import java.util.List;
 @AllArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteListRepo favoriteListRepo;
-
     private final FavoriteMapper favoriteMapper;
+
+    private final MediaClient mediaClient;
 
     @Override
     public List<FavoriteListDto> getAll() {
@@ -53,7 +57,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         var favoriteList = favoriteListRepo.findById(favoriteListId).orElse(null);
         if (favoriteList == null) return null;
         if (!requestFavoriteMedia.isValid()) return null;
-        // TODO: Request to media-service to check if media is valid before adding
+        if (!mediaClient.isValidMedia(requestFavoriteMedia.getMediaId(), requestFavoriteMedia.getMediaType())) {
+            return favoriteMapper.toDto(favoriteList);
+        }
         var newFavoriteMedia = new FavoriteMedia(requestFavoriteMedia.getMediaId(), requestFavoriteMedia.getMediaType(), favoriteList);
         List<FavoriteMedia> favoriteMedias = favoriteList.getFavoriteMediaList();
         boolean hasAdded = favoriteMedias.stream().anyMatch(f -> f.equals(newFavoriteMedia));

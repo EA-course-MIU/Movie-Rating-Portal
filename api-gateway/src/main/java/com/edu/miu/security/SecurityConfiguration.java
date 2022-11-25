@@ -34,6 +34,8 @@ public class SecurityConfiguration {
             //ALLOWING REGISTER API FOR DIRECT ACCESS
             .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, null)).permitAll()
             .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "user-service")).permitAll()
+            .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "series-service")).permitAll()
+            .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "favorite-service")).permitAll()
             .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "movie-service")).permitAll()
 //            .pathMatchers("/v3/api-docs", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/swagger-ui/**").permitAll()
             .pathMatchers("/users/login/**").permitAll()
