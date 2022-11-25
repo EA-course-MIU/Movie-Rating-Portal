@@ -5,7 +5,7 @@ import com.miu.entity.Series;
 import com.miu.service.MetadataClient;
 import com.miu.dto.GenreDto;
 import com.miu.dto.SeriesDto;
-import com.miu.service.impl.MetadataService;
+import com.miu.service.MetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

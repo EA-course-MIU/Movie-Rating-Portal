@@ -1,4 +1,4 @@
-package com.miu.service.impl;
+package com.miu.service;
 
 import com.miu.dto.GenreDto;
 import com.miu.dto.PersonDto;
