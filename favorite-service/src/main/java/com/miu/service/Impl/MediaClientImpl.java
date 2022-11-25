@@ -19,25 +19,32 @@ public class MediaClientImpl implements MediaClient {
 
     @Override
     public boolean isValidMedia(int id, MediaType mediaType) {
-        return this.getMediaById(id, mediaType) == null;
+        return this.getMediaById(id, mediaType) != null;
+    }
+
+    public Object getMovieById(int id) {
+        CircuitBreaker circuitBreaker = seriesCircuitBreakerFactory.create("movie-fetching");
+        return circuitBreaker.run(() -> movieClient.getMovieById(id), throwable -> null);
+    }
+
+    public Object getSeriesById(int id) {
+        CircuitBreaker circuitBreaker = seriesCircuitBreakerFactory.create("series-fetching");
+        return circuitBreaker.run(() -> seriesClient.getSeriesById(id), throwable -> null);
     }
 
     @Override
     public Object getMediaById(int id, MediaType mediaType) {
-        CircuitBreaker circuitBreaker = seriesCircuitBreakerFactory.create("media-fetching");
-        return circuitBreaker.run(() -> {
             try {
                 switch (mediaType) {
                     case MOVIE:
-                        return movieClient.getMovieById(id);
+                        return this.getMovieById(id);
                     case TV_SERIES:
-                        return seriesClient.getSeriesById(id);
+                        return this.getSeriesById(id);
                     default:
                         return null;
                 }
             } catch (Exception e) {
                 return null;
             }
-        }, throwable -> null);
     }
 }
