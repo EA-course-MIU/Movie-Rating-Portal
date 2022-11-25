@@ -25,8 +25,24 @@ public class UserController {
         return userService.getAll();
     }
 
+
+    @GetMapping("/{id}")
+    public Object getUser(@PathVariable String id) {
+        return keycloakService.getUser(id);
+    }
+
     @PostMapping
     public String createUser(@RequestBody UserKeycloakDto userKeycloakDto) {
         return keycloakService.createUser(userKeycloakDto);
+    }
+
+    @PutMapping("/{id}")
+    public Object updateUser(@PathVariable String id, @RequestBody UserKeycloakDto userKeycloakDto) {
+        return keycloakService.updateUser(id, userKeycloakDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public Object deleteUser(@PathVariable String id) {
+        return keycloakService.deleteUser(id);
     }
 }
