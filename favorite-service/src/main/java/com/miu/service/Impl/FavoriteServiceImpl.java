@@ -42,19 +42,19 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Transactional
     @Override
-    public FavoriteListDto update(int id, RequestFavoriteListDto requestFavoriteListDto) {
+    public FavoriteListDto update(int id, RequestFavoriteListDto requestFavoriteListDto, String userId) {
         var favoriteList = favoriteListRepo.findById(id).orElse(null);
-        if (favoriteList == null) return null;
+        if (favoriteList == null || !favoriteList.getUserId().equals(userId)) return null;
         favoriteList.setTitle(requestFavoriteListDto.getTitle());
         return favoriteMapper.toDto(favoriteList);
     }
 
     @Transactional
     @Override
-    public FavoriteListDto addFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia) {
-        var favoriteList = favoriteListRepo.findById(favoriteListId).orElse(null);
-        if (favoriteList == null) return null;
+    public FavoriteListDto addFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia, String userId) {
         if (!requestFavoriteMedia.isValid()) return null;
+        var favoriteList = favoriteListRepo.findById(favoriteListId).orElse(null);
+        if (favoriteList == null || !favoriteList.getUserId().equals(userId)) return null;
         if (!mediaClient.isValidMedia(requestFavoriteMedia.getMediaId(), requestFavoriteMedia.getMediaType())) {
             return favoriteMapper.toDto(favoriteList);
         }
@@ -69,16 +69,18 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Transactional
     @Override
-    public FavoriteListDto removeFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia) {
+    public FavoriteListDto removeFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia, String userId) {
         var favoriteList = favoriteListRepo.findById(favoriteListId).orElse(null);
-        if (favoriteList == null || !requestFavoriteMedia.isValid()) return null;
+        if (!requestFavoriteMedia.isValid() || favoriteList == null || !favoriteList.getUserId().equals(userId)) return null;
         favoriteList.getFavoriteMediaList().remove(new FavoriteMedia(requestFavoriteMedia.getMediaId(), requestFavoriteMedia.getMediaType(), favoriteList));
         return favoriteMapper.toDto(favoriteList);
     }
 
     @Transactional
     @Override
-    public void delete(int id) {
+    public void delete(int id, String userId) {
+        var favoriteList = favoriteListRepo.findById(id).orElse(null);
+        if (favoriteList == null || !favoriteList.getUserId().equals(userId)) return;
         favoriteListRepo.deleteById(id);
     }
 
