@@ -43,6 +43,7 @@ services:
   metadata-db:
       image: postgres
       environment:
+        POSTGRES_DB: metadata-db
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: 1
       ports:
@@ -100,3 +101,14 @@ services:
     command:
       - "start-dev"
     restart: unless-stopped
+
+  vault-server:
+    image: vault:latest
+    container_name: vault-microservices
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: "00000000-0000-0000-0000-000000000000"

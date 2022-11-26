@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    active: git, vault
+  cloud:
+    config:
+      server:
+        vault:
+          host: localhost
+          order: 1
+          authentication: TOKEN
+          token: 00000000-0000-0000-0000-000000000000
+          port: 8200
+          kv-version: 2
+        git:
+          skip-ssl-validation: true
+          clone-on-start: true
+          uri: https://github.com/EA-course-MIU/config-repo
+          skipSslValidation: true
+          order: 2
+          default-label: main
+    service-registry:
+      auto-registration:
+        enabled: true
+    discovery:
+      enabled: true
+  application:
+    name: config-service
+  zipkin:
+    base-url: http://localhost:9411
+management:
+  health:
+    livenessstate:
+        enabled: true
+    readinessstate:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+eureka:
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      registerWithEureka: true
+      defaultZone: http://localhost:8888/eureka
+    enabled: true
+server:
+  port: 4040
