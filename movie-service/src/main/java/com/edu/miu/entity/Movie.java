@@ -12,8 +12,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Movie extends Media {
-    private int year;
+    private Integer year;
 
-    private String duration;
+    private Integer duration;
 
 }

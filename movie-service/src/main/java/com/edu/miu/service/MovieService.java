@@ -1,5 +1,6 @@
 package com.edu.miu.service;
 
+import com.edu.miu.dto.FullMovieDto;
 import com.edu.miu.dto.criteria.MovieCriteria;
 import com.edu.miu.dto.MovieDto;
 
@@ -7,21 +8,21 @@ import java.util.List;
 
 public interface MovieService {
 
-    MovieDto getById(int id);
+    FullMovieDto getById(int id);
 
-    List<MovieDto> getByDirectorId(int id);
+    List<FullMovieDto> getByDirectorId(int id);
 
-    List<MovieDto> getByActorsId(int id);
+    List<FullMovieDto> getByActorsId(int id);
 
-    List<MovieDto> getByGenresId(int id);
+    List<FullMovieDto> getByGenresId(int id);
 
-    List<MovieDto> filterMovies(MovieCriteria movieCriteria);
+    List<FullMovieDto> filterMovies(MovieCriteria movieCriteria);
 
-    List<MovieDto> getAll();
+    List<FullMovieDto> getAll();
 
-    MovieDto addMovie(MovieDto movieDto);
+    FullMovieDto addMovie(MovieDto movieDto);
 
-    MovieDto updateMovie(int id, MovieDto movieDto);
+    FullMovieDto updateMovie(int id, MovieDto movieDto);
 
     MovieDto deleteMovie(int id);
     

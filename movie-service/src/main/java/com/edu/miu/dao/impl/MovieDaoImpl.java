@@ -2,10 +2,13 @@ package com.edu.miu.dao.impl;
 
 import com.edu.miu.dao.MovieDao;
 import com.edu.miu.dto.criteria.MovieCriteria;
-import com.edu.miu.entity.Actor;
-import com.edu.miu.entity.Director;
-import com.edu.miu.entity.Genre;
+import com.edu.miu.entity.MediaActor;
+import com.edu.miu.entity.MediaDirector;
+import com.edu.miu.entity.MediaGenre;
 import com.edu.miu.entity.Movie;
+import com.edu.miu.entity.key.MediaActorKey;
+import com.edu.miu.entity.key.MediaDirectorKey;
+import com.edu.miu.entity.key.MediaGenreKey;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -30,9 +33,6 @@ public class MovieDaoImpl implements MovieDao {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Movie> query = builder.createQuery(Movie.class);
 
-        Metamodel m = entityManager.getMetamodel();
-        EntityType<Movie> Movie_ = m.entity(Movie.class);
-
         Root<Movie> root= query.from(Movie.class);
         List<Predicate> predicates = new ArrayList<>();
 
@@ -48,13 +48,13 @@ public class MovieDaoImpl implements MovieDao {
             predicates.add(builder.equal(root.get("year"), movieCriteria.getYear()));
         }
 
-        if(StringUtils.isNotBlank(movieCriteria.getDuration())){
-            predicates.add(builder.like(root.get("duration"), this.addLikeChar(movieCriteria.getDuration())));
+        if(movieCriteria.getDuration() > 0){
+            predicates.add(builder.greaterThanOrEqualTo(root.get("duration"), movieCriteria.getDuration()));
         }
 
         if(movieCriteria.getDirectors() != null && !movieCriteria.getDirectors().isEmpty()){
-            Join<Movie, Director> directorsJoin = root.join("directors");
-            CriteriaBuilder.In<Integer> inClause = builder.in(directorsJoin.get("directorId"));
+            Join<Movie, MediaDirector> directorsJoin = root.join("mediaDirectors");
+            CriteriaBuilder.In<Integer> inClause = builder.in(directorsJoin.get("id").get("directorId"));
             for (int id : movieCriteria.getDirectors()) {
                 inClause.value(id);
             }
@@ -81,8 +81,8 @@ public class MovieDaoImpl implements MovieDao {
         }
 
         if(movieCriteria.getActors() != null && !movieCriteria.getActors().isEmpty()){
-            Join<Movie, Actor> directorsJoin = root.join("actors");
-            CriteriaBuilder.In<Integer> inClause = builder.in(directorsJoin.get("actorId"));
+            Join<Movie, MediaActor> directorsJoin = root.join("mediaActors");
+            CriteriaBuilder.In<Integer> inClause = builder.in(directorsJoin.get("id").get("actorId"));
             for (int id : movieCriteria.getActors()) {
                 inClause.value(id);
             }
@@ -90,8 +90,8 @@ public class MovieDaoImpl implements MovieDao {
         }
 
         if(movieCriteria.getGenres() != null && !movieCriteria.getGenres().isEmpty()){
-            Join<Movie, Genre> directorsJoin = root.join("genres");
-            CriteriaBuilder.In<Integer> inClause = builder.in(directorsJoin.get("genreId"));
+            Join<Movie, MediaGenre> directorsJoin = root.join("mediaGenres");
+            CriteriaBuilder.In<Integer> inClause = builder.in(directorsJoin.get("id").get("genreId"));
             for (int id : movieCriteria.getGenres()) {
                 inClause.value(id);
             }

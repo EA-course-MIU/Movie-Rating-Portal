@@ -10,7 +10,7 @@ public class KafkaTopicsConfig {
 
     @Bean
     public NewTopic adviceTopic() {
-        return new NewTopic("update-avg-rating-topic", 1, (short) 1);
+        return new NewTopic("avg-rating-movie-topic", 1, (short) 1);
     }
 
 
