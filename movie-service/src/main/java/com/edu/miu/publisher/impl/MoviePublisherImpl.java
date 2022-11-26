@@ -1,6 +1,6 @@
 package com.edu.miu.publisher.impl;
 
-import com.edu.miu.dto.RatingDto;
+import com.edu.miu.dto.message.MediaDto;
 import com.edu.miu.publisher.MoviePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,7 +13,7 @@ public class MoviePublisherImpl implements MoviePublisher {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
-    public void sendRemovedMovieMessage(RatingDto ratingDto) {
-        kafkaTemplate.send("remove-movie-topic", ratingDto);
+    public void sendRemovedMovieMessage(MediaDto mediaDto) {
+        kafkaTemplate.send("remove-media-topic", mediaDto);
     }
 }

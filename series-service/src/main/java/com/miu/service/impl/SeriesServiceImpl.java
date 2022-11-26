@@ -47,16 +47,22 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Transactional
     @Override
-    public void deleteById(int id) {
-        seriesRepo.deleteById(id);
+    public void deleteById(int id, String userId) {
+        Series series = seriesRepo.findById(id).orElse(null);
+        if(series != null && series.getOwnerId().equals(userId)) {
+            seriesRepo.deleteById(id);
+        }
     }
 
 
     @Transactional
     @Override
-    public SeriesDto updateSeries(int id, RequestSeriesDto series) {
+    public SeriesDto updateSeries(int id, RequestSeriesDto series, String userId) {
         Series updatingSeries = seriesRepo.findById(id).orElse(null);
         if (updatingSeries == null) {
+            return null;
+        }
+        if(!updatingSeries.getOwnerId().equals(userId)){
             return null;
         }
         if (series.getTitle() != null) {

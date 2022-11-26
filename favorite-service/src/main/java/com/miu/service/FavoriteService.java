@@ -10,9 +10,9 @@ public interface FavoriteService {
     List<FavoriteListDto> getAll();
     FavoriteListDto getById(int id);
     FavoriteListDto create(RequestFavoriteListDto requestFavoriteListDto);
-    FavoriteListDto update(int id, RequestFavoriteListDto requestFavoriteListDto);
-    FavoriteListDto addFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia);
-    FavoriteListDto removeFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia);
-    void delete(int id);
+    FavoriteListDto update(int id, RequestFavoriteListDto requestFavoriteListDto, String userId);
+    FavoriteListDto addFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia, String userId);
+    FavoriteListDto removeFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia, String userId);
+    void delete(int id, String userId);
     List<FavoriteListDto> getAllByUserId(String userId);
 }

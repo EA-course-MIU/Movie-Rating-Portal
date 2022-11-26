@@ -1,6 +1,7 @@
 package com.edu.miu.service.impl;
 
 import com.edu.miu.dto.UserKeycloakDto;
+import com.edu.miu.publisher.PublisherService;
 import com.edu.miu.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
@@ -55,6 +56,8 @@ public class KeycloakServiceImpl implements KeycloakService {
     private String adminPassword;
 
     private final ModelMapper modelMapper;
+
+    private final PublisherService publisherService;
 
     @Override
     public Object getUser(String id) {
@@ -132,6 +135,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         UserRepresentation userRepresentation = this.getUserRepresentation(userId, usersResource);
         if (userRepresentation != null) {
             usersResource.delete(userId);
+            publisherService.sendDeleteUserMessage(userId);
         }
         return userRepresentation;
     }

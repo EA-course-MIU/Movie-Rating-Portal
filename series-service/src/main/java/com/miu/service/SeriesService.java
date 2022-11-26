@@ -9,8 +9,8 @@ import java.util.List;
 public interface SeriesService {
     SeriesDto getById(int id);
     List<SeriesDto> getAll();
-    void deleteById(int id);
-    SeriesDto updateSeries(int id, RequestSeriesDto series);
+    void deleteById(int id, String userId);
+    SeriesDto updateSeries(int id, RequestSeriesDto series, String userId);
     SeriesDto saveSeries(RequestSeriesDto series);
     List<SeriesDto> filter(FilterDto filterDto);
     SeriesDto updateRating(int id, double rating);

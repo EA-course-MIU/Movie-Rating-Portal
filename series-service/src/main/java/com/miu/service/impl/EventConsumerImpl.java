@@ -19,7 +19,7 @@ public class EventConsumerImpl implements EventConsumer {
     private final SeasonRepo seasonRepo;
     private final EpisodeRepo episodeRepo;
 
-    @KafkaListener(topics = "user-delete-topic", groupId = "series-service")
+    @KafkaListener(topics = "remove-user-topic", groupId = "series-service")
     @Override
     public void receiveDeleteUser(ConsumerRecord<String, String> cr, String userId) {
         seriesRepo.deleteAllByOwnerIdIs(userId);

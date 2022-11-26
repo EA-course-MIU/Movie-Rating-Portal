@@ -32,8 +32,8 @@ public class CommonConfig {
     }
 
     @Bean
-    public Queue removeMovieQueue() {
-        return new Queue("remove-movie-queue", true);
+    public Queue removeMediaQueue() {
+        return new Queue("remove-media-queue", true);
     }
 
 }

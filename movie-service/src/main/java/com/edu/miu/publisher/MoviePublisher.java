@@ -1,9 +1,9 @@
 package com.edu.miu.publisher;
 
-import com.edu.miu.dto.RatingDto;
+import com.edu.miu.dto.message.MediaDto;
 
 public interface MoviePublisher {
 
-    void sendRemovedMovieMessage(RatingDto ratingDto);
+    void sendRemovedMovieMessage(MediaDto mediaDto);
 
 }

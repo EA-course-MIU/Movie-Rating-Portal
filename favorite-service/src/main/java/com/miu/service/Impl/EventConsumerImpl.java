@@ -28,7 +28,7 @@ public class EventConsumerImpl implements EventConsumer {
         favoriteMediaRepo.deleteAllByMediaId(mediaDto.getType(), mediaDto.getId());
     }
 
-    @KafkaListener(topics = "user-delete-topic", groupId = "favorite-service")
+    @KafkaListener(topics = "remove-user-topic", groupId = "favorite-service")
     @Override
     public void receiveDeleteUser(ConsumerRecord<String, String> cr, @Payload String userId) {
         favoriteListRepo.deleteAllByUserIdIs(userId);

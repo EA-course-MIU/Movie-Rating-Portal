@@ -28,5 +28,8 @@ public interface RatingRepository extends CrudRepository<Rating, Integer> {
     @Query("DELETE FROM Rating r WHERE r.mediaId=:mediaId AND r.mediaType=:mediaType")
     void deleteAllByMediaIdAndMediaType(@Param("mediaId") int mediaId, MediaType mediaType);
 
+    @Modifying
+    @Query("DELETE FROM Rating r WHERE r.userId=:userId")
+    void deleteByUserId(@Param("userId") String userId);
 
 }
