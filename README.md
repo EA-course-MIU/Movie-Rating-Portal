@@ -53,7 +53,7 @@ Your project must have
 * Use RabbitMQ and Kafka.
 * Each micro-service must contain a Dockerfile to create a docker image.
 * Implement Eventual Consistency.
-* Each service must have `data.sql` for dummy data.
+* Each service must have `data.doc` for dummy data.
 * Have 1 Kubernetes Deployment Configuration file.
 * Create a Postman collection for each endpoint.
 * Create API documentation with Swagger.
