@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface EpisodeRepo extends CrudRepository<Episode, Integer> {
     List<Episode> findAllBySeasonIs(Season season);
+    void deleteAllByOwnerIdIs(String ownerId);
 }

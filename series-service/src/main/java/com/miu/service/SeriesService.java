@@ -12,7 +12,6 @@ public interface SeriesService {
     void deleteById(int id);
     SeriesDto updateSeries(int id, RequestSeriesDto series);
     SeriesDto saveSeries(RequestSeriesDto series);
-
     List<SeriesDto> filter(FilterDto filterDto);
     SeriesDto updateRating(int id, double rating);
 }

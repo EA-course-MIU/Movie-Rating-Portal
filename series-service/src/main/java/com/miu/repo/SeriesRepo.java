@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SeriesRepo extends CrudRepository<Series, Integer> {
+    void deleteAllByOwnerIdIs(String ownerId);
 }
