@@ -21,7 +21,7 @@ public class MediaClientImpl implements MediaClient {
 
     @Override
     public boolean isValidMedia(int id, MediaType mediaType) {
-        return false;
+        return this.getMediaById(id, mediaType) != null;
     }
 
     @Override

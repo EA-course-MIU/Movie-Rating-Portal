@@ -1,6 +1,5 @@
 package com.edu.miu.service.impl;
 
-import com.edu.miu.client.MetaDataClient;
 import com.edu.miu.dao.MovieDao;
 import com.edu.miu.dto.*;
 import com.edu.miu.dto.criteria.MetaDataCriteria;
@@ -17,6 +16,7 @@ import com.edu.miu.repository.MovieRepository;
 import com.edu.miu.enums.MediaType;
 import com.edu.miu.publisher.MoviePublisher;
 import com.edu.miu.publisher.RabbitMQService;
+import com.edu.miu.service.MetaDataService;
 import com.edu.miu.service.MovieService;
 import com.edu.miu.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class MovieServiceImpl implements MovieService {
 
     private final RabbitMQService rabbitMQService;
 
-    private final MetaDataClient metaDataClient;
+    private final MetaDataService metaDataService;
 
     @Override
     public FullMovieDto getById(int id) {
@@ -48,28 +49,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieDto> getByDirectorId(int id) {
-        return movieRepository.findAllByMediaDirectorsIdDirectorId(id).stream()
-                .map(this::convertTo).toList();
+    public List<FullMovieDto> getByDirectorId(int id) {
+        List<Movie> movies = movieRepository.findAllByMediaDirectorsIdDirectorId(id);
+        return this.convertToFullMovieDtoList(movies);
     }
 
     @Override
-    public List<MovieDto> getByActorsId(int id) {
-        return movieRepository.findAllByMediaActorsIdActorId(id).stream()
-                .map(this::convertTo).toList();
+    public List<FullMovieDto> getByActorsId(int id) {
+        List<Movie> movies = movieRepository.findAllByMediaActorsIdActorId(id);
+        return this.convertToFullMovieDtoList(movies);
     }
 
     @Override
-    public List<MovieDto> getByGenresId(int id) {
-        return movieRepository.findAllByMediaGenresIdGenreId(id).stream()
-                .map(this::convertTo).toList();
+    public List<FullMovieDto> getByGenresId(int id) {
+        List<Movie> movies = movieRepository.findAllByMediaGenresIdGenreId(id);
+        return this.convertToFullMovieDtoList(movies);
     }
 
     @Override
-    public List<MovieDto> filterMovies(MovieCriteria movieCriteria) {
-        return movieDao.filterMovies(movieCriteria).stream()
-                .map(this::convertTo)
-                .toList();
+    public List<FullMovieDto> filterMovies(MovieCriteria movieCriteria) {
+        List<Movie> movies = movieDao.filterMovies(movieCriteria);
+        return this.convertToFullMovieDtoList(movies);
     }
 
     private Movie getMovieById(int id) {
@@ -77,10 +77,9 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieDto> getAll() {
-        return movieRepository.findAll().stream()
-                .map(this::convertTo)
-                .toList();
+    public List<FullMovieDto> getAll() {
+        List<Movie> movies = movieRepository.findAll();
+        return this.convertToFullMovieDtoList(movies);
     }
 
     @Override
@@ -96,21 +95,18 @@ public class MovieServiceImpl implements MovieService {
         List<Integer> actorIds = movieDto.getActorIds();
 
         if (genreIds != null && genreIds.size() > 0) {
-            List<Object> genres = metaDataClient.getGenres(genreIds);
-            List<GenreDto> genreDtoList = genres.stream().map(g -> modelMapper.map(g, GenreDto.class)).toList();
+            List<GenreDto> genreDtoList = metaDataService.getGenres(genreIds);
             movieDto.setGenreIds(genreDtoList.stream().map(GenreDto::getId).toList());
         }
 
         if (directorIds != null && directorIds.size() > 0) {
-            List<Object> directors = metaDataClient.getPersons(PositionType.DIRECTOR.name(), directorIds);
-            List<PersonDto> persons = directors.stream().map(p -> modelMapper.map(p, PersonDto.class)).toList();
-            movieDto.setDirectorIds(persons.stream().map(PersonDto::getId).toList());
+            List<PersonDto> directors = metaDataService.getPersons(PositionType.DIRECTOR.name(), directorIds);
+            movieDto.setDirectorIds(directors.stream().map(PersonDto::getId).toList());
         }
 
         if (actorIds != null && actorIds.size() > 0) {
-            List<Object> actors = metaDataClient.getPersons(PositionType.ACTOR.name(), actorIds);
-            List<PersonDto> persons = actors.stream().map(p -> modelMapper.map(p, PersonDto.class)).toList();
-            movieDto.setDirectorIds(persons.stream().map(PersonDto::getId).toList());
+            List<PersonDto> actors = metaDataService.getPersons(PositionType.ACTOR.name(), directorIds);
+            movieDto.setDirectorIds(actors.stream().map(PersonDto::getId).toList());
         }
 
         return movieDto;
@@ -304,17 +300,23 @@ public class MovieServiceImpl implements MovieService {
         return movie;
     }
 
+    private List<FullMovieDto> convertToFullMovieDtoList(List<Movie> movies) {
+        if (movies == null || movies.size() == 0) {
+            return Collections.emptyList();
+        }
+
+        return movies.stream().map(this::convertToFullMovieDto).toList();
+    }
+
     private FullMovieDto convertToFullMovieDto(Movie movie) {
         if (movie == null) {
             return null;
         }
         MovieDto movieDto = this.convertTo(movie);
+        MetaDataCriteria metaDataCriteria = new MetaDataCriteria(movieDto.getGenreIds(), movieDto.getDirectorIds(), movieDto.getActorIds());
+        MetaDataDto metaDataDto = metaDataService.getMetaDataDto(metaDataCriteria);
+
         FullMovieDto fullMovieDto = modelMapper.map(movieDto, FullMovieDto.class);
-        Object data = metaDataClient.getAll(new MetaDataCriteria(movieDto.getGenreIds(), movieDto.getDirectorIds(), movieDto.getActorIds()));
-
-//        Object data = metaDataClient.getAll(movieDto.getGenreIds(), movieDto.getDirectorIds(), movieDto.getActorIds());
-
-        MetaDataDto metaDataDto = modelMapper.map(data, MetaDataDto.class);
         fullMovieDto.setGenres(metaDataDto.getGenres());
         fullMovieDto.setDirectors(metaDataDto.getDirectors());
         fullMovieDto.setActors(metaDataDto.getActors());

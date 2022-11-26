@@ -6,6 +6,7 @@ import com.edu.miu.dto.MovieDto;
 import com.edu.miu.service.MovieService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping
-    public List<MovieDto> getAll() {
+    public List<FullMovieDto> getAll() {
         return movieService.getAll();
     }
 
@@ -29,22 +30,22 @@ public class MovieController {
     }
 
     @GetMapping("/director/{id}")
-    public List<MovieDto> getByDirectorId(@PathVariable int id) {
+    public List<FullMovieDto> getByDirectorId(@PathVariable int id) {
         return movieService.getByDirectorId(id);
     }
 
     @GetMapping("/actor/{id}")
-    public List<MovieDto> getByActorId(@PathVariable int id) {
+    public List<FullMovieDto> getByActorId(@PathVariable int id) {
         return movieService.getByActorsId(id);
     }
 
     @GetMapping("/genre/{id}")
-    public List<MovieDto> getByGenreId(@PathVariable int id) {
+    public List<FullMovieDto> getByGenreId(@PathVariable int id) {
         return movieService.getByGenresId(id);
     }
 
     @GetMapping("/filter")
-    public List<MovieDto> filter(MovieCriteria movieCriteria) {
+    public List<FullMovieDto> filter(MovieCriteria movieCriteria) {
         return movieService.filterMovies(movieCriteria);
     }
 

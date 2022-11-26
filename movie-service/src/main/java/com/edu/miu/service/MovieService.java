@@ -10,15 +10,15 @@ public interface MovieService {
 
     FullMovieDto getById(int id);
 
-    List<MovieDto> getByDirectorId(int id);
+    List<FullMovieDto> getByDirectorId(int id);
 
-    List<MovieDto> getByActorsId(int id);
+    List<FullMovieDto> getByActorsId(int id);
 
-    List<MovieDto> getByGenresId(int id);
+    List<FullMovieDto> getByGenresId(int id);
 
-    List<MovieDto> filterMovies(MovieCriteria movieCriteria);
+    List<FullMovieDto> filterMovies(MovieCriteria movieCriteria);
 
-    List<MovieDto> getAll();
+    List<FullMovieDto> getAll();
 
     FullMovieDto addMovie(MovieDto movieDto);
 

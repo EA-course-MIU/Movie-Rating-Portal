@@ -55,3 +55,6 @@ management:
   endpoint:
     health:
       show-details: always
+
+keycloak:
+  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkMjKgPrcd9RUBPhS42SQ6SqXQrk44aTUQUvekOe/O6TSW5InzVgc5ZY0XC7ENcfshsE/E8nIb6L5qaJ7H9k13BjVsLtcblRg6bMPGmX4DtyWwauVgtcDr7Hqb6XexiPfahpxOKP9xV/KDDvMfX4j/tXgR2rDeR/kKF+0vNE6tCReBhdyIwYZPdzRC9aIJtx6CezJx1TK7kD48XBm5j/DzsnQfJYMKZlNKzmdzdPEouRY+ZWeHT2otDxCGaeLNMa/uApkd8+2exMAQucXwjDS0vnUGF3VP5A06p6mCGAxvKhFrw5gLpx4e+fFidqKModavz/xEkriEJ+nydxL72C6+QIDAQAB
