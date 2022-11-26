@@ -1,7 +1,7 @@
-package com.edu.miu.comsumer.Impl;
+package com.edu.miu.comsumer.impl;
 
-import com.edu.miu.dto.MediaDto;
 import com.edu.miu.comsumer.CommentConsumer;
+import com.edu.miu.dto.MediaDto;
 import com.edu.miu.dto.UserDto;
 import com.edu.miu.service.CommentService;
 import lombok.RequiredArgsConstructor;
