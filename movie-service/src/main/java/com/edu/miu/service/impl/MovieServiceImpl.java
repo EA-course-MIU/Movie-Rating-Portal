@@ -4,6 +4,7 @@ import com.edu.miu.dao.MovieDao;
 import com.edu.miu.dto.*;
 import com.edu.miu.dto.criteria.MetaDataCriteria;
 import com.edu.miu.dto.criteria.MovieCriteria;
+import com.edu.miu.dto.message.MediaDto;
 import com.edu.miu.entity.MediaActor;
 import com.edu.miu.entity.MediaDirector;
 import com.edu.miu.entity.MediaGenre;
@@ -236,13 +237,13 @@ public class MovieServiceImpl implements MovieService {
 
         if (movie != null) {
             movieRepository.deleteById(id);
-            RatingDto ratingDto = new RatingDto();
-            ratingDto.setMediaId(id);
-            ratingDto.setMediaType(MediaType.MOVIE);
+            MediaDto mediaDto = new MediaDto();
+            mediaDto.setMediaId(id);
+            mediaDto.setMediaType(MediaType.MOVIE);
 
-            moviePublisher.sendRemovedMovieMessage(ratingDto);
+            moviePublisher.sendRemovedMovieMessage(mediaDto);
 
-//            rabbitMQService.sendExchange("movie-topic-exchange", "remove-movie-queue", ratingDto);
+//            rabbitMQService.sendExchange("media-topic-exchange", "remove-media-queue", ratingDto);
         }
 
         return this.convertTo(movie);

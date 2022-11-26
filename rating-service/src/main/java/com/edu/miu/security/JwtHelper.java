@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-@PropertySource("classpath:application.yml")
+@PropertySource("classpath:application.properties")
 public class JwtHelper {
 
     private String rsaPublicKey;

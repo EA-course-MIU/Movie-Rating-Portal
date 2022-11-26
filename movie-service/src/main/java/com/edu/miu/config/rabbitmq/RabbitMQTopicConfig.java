@@ -12,7 +12,7 @@ public class RabbitMQTopicConfig {
 
     @Bean
     TopicExchange topicExchange() {
-        return new TopicExchange("movie-topic-exchange");
+        return new TopicExchange("media-topic-exchange");
     }
 
     @Bean
@@ -20,7 +20,7 @@ public class RabbitMQTopicConfig {
         return BindingBuilder
                 .bind(removeRatingQueue)
                 .to(topicExchange)
-                .with("remove-movie-queue");
+                .with("remove-media-queue");
     }
 
 }

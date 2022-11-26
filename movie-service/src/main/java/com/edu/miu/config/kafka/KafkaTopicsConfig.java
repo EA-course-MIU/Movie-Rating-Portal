@@ -10,7 +10,7 @@ public class KafkaTopicsConfig {
 
     @Bean
     public NewTopic adviceTopic() {
-        return new NewTopic("remove-movie-topic", 1, (short) 1);
+        return new NewTopic("remove-media-topic", 1, (short) 1);
     }
 
 
