@@ -1,11 +1,16 @@
 package com.example.service;
 
-import com.example.dto.UserDto;
+import com.example.dto.CommentDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 @FeignClient("USER-SERVICE")
 public interface UserClient {
-    @GetMapping("/users")
-    Iterable<UserDto> getAllUsers();
+    @RequestMapping(method = RequestMethod.GET, value="/users/{userId}")
+    List <CommentDto> findByUserId(@PathVariable("userId") int userId);
+
 }

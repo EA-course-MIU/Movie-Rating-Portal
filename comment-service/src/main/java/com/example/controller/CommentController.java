@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.CommentDto;
-import com.example.entity.Comment;
 import com.example.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/users/{id}")
-    public CommentDto deleteByUserId (@PathVariable("id") int id) {
+    public List<CommentDto> deleteByUserId (@PathVariable("id") int id) {
         return commentService.deleteByUserId (id);
     }
 

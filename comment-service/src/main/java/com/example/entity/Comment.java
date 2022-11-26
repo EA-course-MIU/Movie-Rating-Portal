@@ -1,7 +1,6 @@
 package com.example.entity;
 
 import com.example.enums.MediaType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;

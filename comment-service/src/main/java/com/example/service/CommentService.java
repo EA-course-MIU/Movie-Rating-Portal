@@ -1,7 +1,8 @@
 package com.example.service;
 
+import com.example.dto.MediaDto;
+import com.example.dto.UserDto;
 import com.example.dto.CommentDto;
-import com.example.entity.Comment;
 
 import java.util.List;
 
@@ -12,9 +13,13 @@ public interface CommentService {
 
     List<CommentDto> findByUserAndMedia (int userId,int mediaId);
 
-    CommentDto deleteByUserId (int id);
+    List<CommentDto> deleteByUserId (int id);
 
     CommentDto addByUserId (int id,CommentDto commentDto);
 
     CommentDto updateByUserId (Integer id,CommentDto commentDto);
+
+    void deleteCommentByMediaId (MediaDto mediaDto);
+
+    void deleteCommentByUserId (UserDto userDto);
 }
