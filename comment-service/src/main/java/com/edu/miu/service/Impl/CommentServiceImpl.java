@@ -25,8 +25,6 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepo commentRepo;
     private final CommentMapper commentMapper;
 
-    private final CircuitBreakerFactory seriesCircuitBreakerFactory;
-
 
 
     @Override
@@ -76,18 +74,9 @@ public class CommentServiceImpl implements CommentService {
             throw new RuntimeException ("Comment of User Id:"+id+"is not exist");
         }
         else {
-//            if(exist.getCreatedDate () !=null &&!Objects.equals (exist.getCreatedDate (),comment.getCreatedDate ())){
-//                exist.setCreatedDate (comment.getCreatedDate ());
-//            }
-//            if(exist.getUpdateDate () !=null &&!Objects.equals (exist.getUpdateDate (),comment.getUpdateDate ())){
-//                exist.setUpdateDate (comment.getUpdateDate ());
-//            }
             if(exist.getComment () !=null &&!Objects.equals (exist.getComment (),comment.getComment ())){
                 exist.setComment (comment.getComment ());
             }
-//            if(exist.getMediaType () !=null &&!Objects.equals (exist.getMediaType (),comment.getMediaType ())){
-//                exist.setMediaType (comment.getMediaType ());
-//            }
 
         }
         return commentMapper.toDto (exist);
