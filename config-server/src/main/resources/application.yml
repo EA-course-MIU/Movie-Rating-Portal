@@ -1,23 +1,24 @@
 spring:
   profiles:
-    active: git, vault
+    active: vault, git
   cloud:
     config:
       server:
         vault:
-          host: localhost
           order: 1
+          host: 127.0.0.1
+          port: 8200
           authentication: TOKEN
           token: 00000000-0000-0000-0000-000000000000
-          port: 8200
+          scheme: http
           kv-version: 2
         git:
+          order: 2
           skip-ssl-validation: true
           clone-on-start: true
           uri: https://github.com/EA-course-MIU/config-repo
-          skipSslValidation: true
-          order: 2
           default-label: main
+          search-paths: config
     service-registry:
       auto-registration:
         enabled: true
@@ -40,7 +41,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: info, health, env
 eureka:
   client:
     registryFetchIntervalSeconds: 5

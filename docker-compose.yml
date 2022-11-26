@@ -3,6 +3,7 @@ services:
   user-db:
     image: postgres
     environment:
+      POSTGRES_DB: user-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     ports:
@@ -11,6 +12,7 @@ services:
   movie-db:
     image: postgres
     environment:
+      POSTGRES_DB: movie-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     ports:
@@ -19,6 +21,7 @@ services:
   comment-db:
     image: postgres
     environment:
+      POSTGRES_DB: comment-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     ports:
@@ -27,6 +30,7 @@ services:
   series-db:
     image: postgres
     environment:
+      POSTGRES_DB: series-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     ports:
@@ -35,6 +39,7 @@ services:
   rating-db:
     image: postgres
     environment:
+      POSTGRES_DB: rating-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     ports:
@@ -52,6 +57,7 @@ services:
   favorite-db:
     image: postgres
     environment:
+      POSTGRES_DB: favorite-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     ports:

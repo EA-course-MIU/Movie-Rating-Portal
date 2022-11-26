@@ -1,47 +1,5 @@
 spring:
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: 'true'
-        show_sql: 'true'
-    defer-datasource-initialization: 'true'
-    hibernate:
-      ddl-auto: create
-  cloud:
-    service-registry:
-      auto-registration:
-        enabled: 'true'
   application:
     name: series-service
-  datasource:
-    password: '1'
-    username: postgres
-    url: jdbc:postgresql://localhost:5435/postgres
-  sql:
-    init:
-      mode: always
-  kafka:
-    consumer:
-      group-id: ea_group_8
-      auto-offset-reset: earliest
-    bootstrap-servers: http://localhost:9092
-  zipkin:
-    base-url: http://localhost:9411
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-eureka:
-  instance:
-    hostname: localhost
-    leaseRenewalIntervalInSeconds: '10'
-  client:
-    registryFetchIntervalSeconds: '5'
-    service-url:
-      defaultZone: http://localhost:8888/eureka
-    serviceUrl:
-      registerWithEureka: 'true'
-      defaultZone: http://localhost:8888/eureka
-    enabled: 'true'
-server:
-  port: '0'
+  config:
+    import: optional:configserver:http://localhost:4040
