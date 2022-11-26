@@ -19,7 +19,7 @@ public class Rating {
 
     private int rating;
 
-    private int userId;
+    private String userId;
 
     private int mediaId;
 

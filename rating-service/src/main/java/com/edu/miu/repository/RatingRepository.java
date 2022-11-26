@@ -18,6 +18,9 @@ public interface RatingRepository extends CrudRepository<Rating, Integer> {
     List<Rating> findByMediaId(int id);
 
 
+    Rating findByUserIdAndMediaIdAndMediaType(String userId, int mediaId, MediaType mediaType);
+
+
     @Query("SELECT AVG(r.rating) FROM Rating r WHERE r.mediaId = ?1 AND r.mediaType = ?2")
     double getAvgRatingToMedia(int id, MediaType mediaType);
 

@@ -21,8 +21,7 @@ public class RatingConsumerImpl implements RatingConsumer {
     @Override
     public void receiveMessageFromMovie(RatingDto ratingDto) {
         if (ratingDto.getMediaId() > 0 && ratingDto.getMediaType() != null) {
-            ratingService.deleteRatingByMediaId(ratingDto);
-            System.out.println(ratingDto);
+            ratingService.deleteRatingByMedia(ratingDto.getMediaId(), ratingDto.getMediaType());
         }
     }
 
@@ -30,8 +29,7 @@ public class RatingConsumerImpl implements RatingConsumer {
     @RabbitListener(queues = {"remove-movie-queue"})
     public void receiveRabbitMessageFromMovie(RatingDto ratingDto) {
         if (ratingDto.getMediaId() > 0 && ratingDto.getMediaType() != null) {
-            ratingService.deleteRatingByMediaId(ratingDto);
-            System.out.println(ratingDto);
+            ratingService.deleteRatingByMedia(ratingDto.getMediaId(), ratingDto.getMediaType());
         }
     }
 }

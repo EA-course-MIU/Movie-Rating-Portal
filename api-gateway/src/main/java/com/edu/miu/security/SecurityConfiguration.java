@@ -3,6 +3,7 @@ package com.edu.miu.security;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -37,10 +38,15 @@ public class SecurityConfiguration {
             .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "series-service")).permitAll()
             .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "favorite-service")).permitAll()
             .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "movie-service")).permitAll()
+            .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "rating-service")).permitAll()
+            .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "metadata-service")).permitAll()
+            .pathMatchers(this.getPrefixPaths(SWAGGER_PATH, "comment-service")).permitAll()
 //            .pathMatchers("/v3/api-docs", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/swagger-ui/**").permitAll()
             .pathMatchers("/users/login/**").permitAll()
             .pathMatchers("/user-service/login/**").permitAll()
             .pathMatchers("/user/api/v1/register").permitAll()
+            .pathMatchers(HttpMethod.GET, "/rating-service/ratings/**", "/ratings/**").permitAll()
+            .pathMatchers(HttpMethod.GET, "/movie-service/movies/**", "/movies/**").permitAll()
             //ALL OTHER APIS ARE AUTHENTICATED
             .anyExchange().authenticated()
             .and()
@@ -65,6 +71,5 @@ public class SecurityConfiguration {
             result = paths.stream().map(s -> String.format("/%s%s", prefix, s)).toList();
         }
         return result.toArray(new String[0]);
-
     }
 }

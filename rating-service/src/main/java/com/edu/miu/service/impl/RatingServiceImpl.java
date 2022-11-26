@@ -1,5 +1,6 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.client.MediaClient;
 import com.edu.miu.dto.MediaRatingDto;
 import com.edu.miu.dto.RatingDto;
 import com.edu.miu.dto.RatingReportDto;
@@ -8,6 +9,7 @@ import com.edu.miu.enums.MediaType;
 import com.edu.miu.repository.RatingRepository;
 import com.edu.miu.publisher.PublisherService;
 import com.edu.miu.publisher.RabbitMQService;
+import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.RatingService;
 import com.edu.miu.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
 
+    private final AuthHelper authHelper;
+
     private final RatingRepository ratingRepository;
 
     private final ModelMapper modelMapper;
@@ -30,6 +34,8 @@ public class RatingServiceImpl implements RatingService {
     private final PublisherService publisherService;
 
     private final RabbitMQService rabbitMQService;
+
+    private final MediaClient mediaClient;
 
     private Rating getRatingById(int id) {
         return ratingRepository.findById(id).orElse(null);
@@ -76,28 +82,51 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingDto addRating(RatingDto ratingDto) {
-        RatingDto result = this.convertTo(ratingRepository.save(this.convertTo((ratingDto))));
-        this.sendMessage(result.getMediaId(), result.getMediaType());
-        return result;
+        int mediaId = ratingDto.getMediaId();
+        MediaType mediaType = ratingDto.getMediaType();
+        boolean isValidMedia = mediaClient.isValidMedia(mediaId, mediaType);
+        if (isValidMedia) {
+            RatingDto result = this.convertTo(ratingRepository.save(this.convertTo((ratingDto))));
+            this.sendMessage(mediaId, mediaType);
+            return result;
+        }
+        return null;
     }
+
+    @Override
+    public RatingDto addRatingByUser(String userId, RatingDto ratingDto) {
+        ratingDto.setUserId(userId);
+        return this.addRating(ratingDto);
+    }
+
     @Override
     public RatingDto updateRating(int id, RatingDto ratingDto) {
         Rating rating = this.getRatingById(id);
+        return this.updateRating(rating, ratingDto);
+    }
+
+    @Override
+    public RatingDto updateRatingByUser(String userId, RatingDto ratingDto) {
+        Rating rating = ratingRepository.findByUserIdAndMediaIdAndMediaType(userId, ratingDto.getMediaId(), ratingDto.getMediaType());
+        return this.updateRating(rating, ratingDto);
+    }
+
+    private RatingDto updateRating(Rating rating, RatingDto ratingDto) {
         boolean isUpdateRating = false;
         if (rating != null) {
             if (ratingDto.getRating() > 0 && ratingDto.getRating() != rating.getRating()) {
                 rating.setRating(ratingDto.getRating());
                 isUpdateRating = true;
             }
-            if (ratingDto.getUserId() > 0 && ratingDto.getUserId() != rating.getUserId()) {
-                rating.setUserId(ratingDto.getUserId());
-            }
-            if (ratingDto.getMediaId() > 0 && ratingDto.getMediaId() != rating.getMediaId()) {
-                rating.setMediaId(ratingDto.getMediaId());
-            }
-            if (ratingDto.getMediaType() != null && ratingDto.getMediaType() != rating.getMediaType()) {
-                rating.setMediaType(ratingDto.getMediaType());
-            }
+//            if (ratingDto.getUserId() != null && ratingDto.getUserId().equals(rating.getUserId())) {
+//                rating.setUserId(ratingDto.getUserId());
+//            }
+//            if (ratingDto.getMediaId() > 0 && ratingDto.getMediaId() != rating.getMediaId()) {
+//                rating.setMediaId(ratingDto.getMediaId());
+//            }
+//            if (ratingDto.getMediaType() != null && ratingDto.getMediaType() != rating.getMediaType()) {
+//                rating.setMediaType(ratingDto.getMediaType());
+//            }
         }
         RatingDto result = this.convertTo(ratingRepository.save(rating));
         if (isUpdateRating) {
@@ -120,8 +149,17 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional
-    public void deleteRatingByMediaId(RatingDto ratingDto) {
-        ratingRepository.deleteAllByMediaIdAndMediaType(ratingDto.getMediaId(), ratingDto.getMediaType());
+    public void deleteRatingByMedia(int mediaId, MediaType mediaType) {
+        ratingRepository.deleteAllByMediaIdAndMediaType(mediaId, mediaType);
+    }
+
+    @Override
+    public RatingDto deleteRatingByUser(String userId, int mediaId, MediaType mediaType) {
+        Rating rating = ratingRepository.findByUserIdAndMediaIdAndMediaType(userId, mediaId, mediaType);
+        if (rating!= null) {
+            ratingRepository.deleteById(rating.getId());
+        }
+        return this.convertTo(rating);
     }
 
     private RatingDto convertTo(Rating rating) {
