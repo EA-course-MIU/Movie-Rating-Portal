@@ -1,7 +1,7 @@
 package com.edu.miu.consumer;
 
-import com.edu.miu.dto.MediaRatingDto;
 import com.edu.miu.dto.RatingDto;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public interface RatingConsumer {
 
@@ -9,5 +9,8 @@ public interface RatingConsumer {
 
 
     void receiveRabbitMessageFromMovie(RatingDto ratingDto);
+
+
+    void receiveMessageFromUser(ConsumerRecord<String, String> cr, String userId);
 
 }

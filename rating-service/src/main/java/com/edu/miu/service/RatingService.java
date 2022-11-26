@@ -31,5 +31,7 @@ public interface RatingService {
     void deleteRatingByMedia(int mediaId, MediaType mediaType);
 
     RatingDto deleteRatingByUser(String userId, int mediaId, MediaType mediaType);
+
+    void deleteAllRatingByUserId(String id);
     
 }
