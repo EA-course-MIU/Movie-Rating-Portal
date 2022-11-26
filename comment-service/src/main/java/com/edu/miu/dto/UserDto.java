@@ -1,6 +1,5 @@
 package com.edu.miu.dto;
 
-import com.edu.miu.enums.MediaType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MediaDto {
-    private Integer id;
-    private MediaType mediaType;
+public class UserDto {
+    private String userId;
 }

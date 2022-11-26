@@ -1,8 +1,7 @@
 package com.edu.miu.consumer.impl;
 
 import com.edu.miu.consumer.RatingConsumer;
-import com.edu.miu.dto.RatingDto;
-import com.edu.miu.dto.message.MediaDto;
+import com.edu.miu.dto.MediaDto;
 import com.edu.miu.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -19,21 +18,21 @@ public class RatingConsumerImpl implements RatingConsumer {
     private final RatingService ratingService;
 
     @KafkaListener(
-            topics = "remove-media-topic",
+            topics = {"remove-media-topic", "series-delete-topic" },
             containerFactory = "removeMediaKafkaListenerContainerFactory",
             groupId = "remove-media-topic")
     @Override
     public void receiveRemovedMediaMessage(MediaDto mediaDto) {
-        if (mediaDto.getMediaId() > 0 && mediaDto.getMediaType() != null) {
-            ratingService.deleteRatingByMedia(mediaDto.getMediaId(), mediaDto.getMediaType());
+        if (mediaDto.getId() > 0 && mediaDto.getMediaType() != null) {
+            ratingService.deleteRatingByMedia(mediaDto.getId(), mediaDto.getMediaType());
         }
     }
 
     @Override
     @RabbitListener(queues = {"remove-media-queue"})
     public void receiveRemovedMediaRabbitMessage(MediaDto mediaDto) {
-        if (mediaDto.getMediaId() > 0 && mediaDto.getMediaType() != null) {
-            ratingService.deleteRatingByMedia(mediaDto.getMediaId(), mediaDto.getMediaType());
+        if (mediaDto.getId() > 0 && mediaDto.getMediaType() != null) {
+            ratingService.deleteRatingByMedia(mediaDto.getId(), mediaDto.getMediaType());
         }
     }
 

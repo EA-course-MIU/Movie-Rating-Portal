@@ -1,6 +1,6 @@
 package com.edu.miu.publisher.impl;
 
-import com.edu.miu.dto.message.MediaDto;
+import com.edu.miu.dto.MediaDto;
 import com.edu.miu.publisher.MoviePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;

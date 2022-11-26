@@ -1,6 +1,7 @@
 package com.edu.miu.config.kafka;
 
 import com.edu.miu.dto.MediaDto;
+import com.edu.miu.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -15,6 +16,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -54,6 +56,21 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, MediaDto> removeMediaKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, MediaDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(removeMediaConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, UserDto> removeUserConsumerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "UserGroupId");
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(UserDto.class));
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, UserDto> removeUserKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, UserDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(removeUserConsumerFactory());
         return factory;
     }
 }

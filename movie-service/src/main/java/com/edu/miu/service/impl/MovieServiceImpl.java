@@ -4,7 +4,7 @@ import com.edu.miu.dao.MovieDao;
 import com.edu.miu.dto.*;
 import com.edu.miu.dto.criteria.MetaDataCriteria;
 import com.edu.miu.dto.criteria.MovieCriteria;
-import com.edu.miu.dto.message.MediaDto;
+import com.edu.miu.dto.MediaDto;
 import com.edu.miu.entity.MediaActor;
 import com.edu.miu.entity.MediaDirector;
 import com.edu.miu.entity.MediaGenre;
@@ -22,6 +22,7 @@ import com.edu.miu.service.MovieService;
 import com.edu.miu.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
+
+    @Value("#{new Boolean('${kafka.enabled:true}')}")
+    private boolean isEnabledKafka;
 
     private final MovieRepository movieRepository;
 
@@ -238,12 +242,15 @@ public class MovieServiceImpl implements MovieService {
         if (movie != null) {
             movieRepository.deleteById(id);
             MediaDto mediaDto = new MediaDto();
-            mediaDto.setMediaId(id);
+            mediaDto.setId(id);
             mediaDto.setMediaType(MediaType.MOVIE);
 
-            moviePublisher.sendRemovedMovieMessage(mediaDto);
+            if (isEnabledKafka) {
+                moviePublisher.sendRemovedMovieMessage(mediaDto);
+            } else {
+                rabbitMQService.sendExchange("media-topic-exchange", "remove-media-queue", mediaDto);
+            }
 
-//            rabbitMQService.sendExchange("media-topic-exchange", "remove-media-queue", ratingDto);
         }
 
         return this.convertTo(movie);

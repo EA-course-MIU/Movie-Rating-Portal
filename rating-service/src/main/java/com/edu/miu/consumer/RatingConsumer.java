@@ -1,6 +1,6 @@
 package com.edu.miu.consumer;
 
-import com.edu.miu.dto.message.MediaDto;
+import com.edu.miu.dto.MediaDto;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public interface RatingConsumer {

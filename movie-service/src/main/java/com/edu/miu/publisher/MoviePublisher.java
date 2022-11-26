@@ -1,6 +1,6 @@
 package com.edu.miu.publisher;
 
-import com.edu.miu.dto.message.MediaDto;
+import com.edu.miu.dto.MediaDto;
 
 public interface MoviePublisher {
 
