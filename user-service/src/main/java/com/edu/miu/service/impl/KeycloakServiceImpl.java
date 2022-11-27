@@ -1,5 +1,6 @@
 package com.edu.miu.service.impl;
 
+import com.edu.miu.config.vault.KeycloakConfiguration;
 import com.edu.miu.dto.UserKeycloakDto;
 import com.edu.miu.publisher.PublisherService;
 import com.edu.miu.service.KeycloakService;
@@ -28,41 +29,27 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     private final String CREDENTIAL_TYPE = "Password";
 
-    @Value("${app.config.keycloak.token-uri}")
-    private String authUrl;
-
     @Value("${app.config.keycloak.url}")
     private String serverUrl;
-
-    @Value("${app.config.keycloak.client-id}")
-    private String clientId;
-
-    @Value("${app.config.keycloak.authorization-grant-type}")
-    private String grantType;
-
-    @Value("${app.config.keycloak.scope}")
-    private String scope;
 
     @Value("${app.config.keycloak.realm}")
     private String realm;
 
-    @Value("${app.config.keycloak.client-secret}")
-    private String secret;
-
-    @Value("${app.config.keycloak.admin.username}")
-    private String adminName;
-
-    @Value("${app.config.keycloak.admin.password}")
-    private String adminPassword;
-
-    private final ModelMapper modelMapper;
-
     private final PublisherService publisherService;
+
+    private final KeycloakConfiguration keycloak;
+
+    private String getAdminName() {
+        return this.keycloak.getUsername() == null ? "admin" : this.keycloak.getUsername();
+    }
+
+    private String getAdminPassword() {
+        return this.keycloak.getPassword() == null ? "admin" : this.keycloak.getPassword();
+    }
 
     @Override
     public Object getUser(String id) {
         UsersResource usersResource = this.getUsersResource();
-//        return modelMapper.map(usersResource.get(id), UserKeycloakDto.class);
         return this.getUserRepresentation(id, usersResource);
     }
 
@@ -150,17 +137,17 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     private UsersResource getUsersResource() {
-        Keycloak keycloak = KeycloakBuilder.builder()
+        Keycloak keycloakData = KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
                 .realm(realm)
                 .grantType(OAuth2Constants.PASSWORD)
-                .clientId(clientId)
-                .clientSecret(secret)
-                .username(adminName)
-                .password(adminPassword)
+                .clientId(keycloak.getClientId())
+                .clientSecret(keycloak.getClientSecret())
+                .username(keycloak.getUsername())
+                .password(keycloak.getPassword())
                 .build();
 
-        RealmResource realmResource = keycloak.realm(realm);
+        RealmResource realmResource = keycloakData.realm(realm);
         return realmResource.users();
     }
 
