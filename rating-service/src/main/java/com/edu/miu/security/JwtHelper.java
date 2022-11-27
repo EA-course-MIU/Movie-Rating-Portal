@@ -24,11 +24,6 @@ public class JwtHelper {
     @Value(value = "${keycloak.public-key}")
     private String rsaPublicKey;
 
-    @Autowired
-    public JwtHelper(@Value("${keycloak.public-key}") String rsaPublicKey) {
-        this.rsaPublicKey = rsaPublicKey;
-    }
-
     private final static String ALG_KEYCLOAK = "RSA";
 
     private final long expiration = 5 * 60 * 60 * 60;
