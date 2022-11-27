@@ -24,8 +24,8 @@ spring:
   application:
     name: comment-service
   datasource:
-#    password: 1
-    password: postgres
+    password: 1
+#    password: postgres
     username: postgres
 #    url: jdbc:postgresql://postgres:59752/comment-db
     url: jdbc:postgresql://localhost:5434/postgres
