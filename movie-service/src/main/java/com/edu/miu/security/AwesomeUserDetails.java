@@ -36,9 +36,13 @@ public class AwesomeUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(Object::toString)
-                .map(r -> "ROLE_" + r)
+                .map(r -> "ROLE_" + r.toUpperCase())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    public boolean isAdmin() {
+        return roles.contains("ADMIN");
     }
     @Override
     public String getPassword() {

@@ -26,7 +26,7 @@ public class MovieDto {
 
     private List<Integer> actorIds;
 
-    private int ownerId;
+    private String ownerId;
 
     private int year;
 

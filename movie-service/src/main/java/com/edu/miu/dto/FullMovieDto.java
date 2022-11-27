@@ -25,7 +25,7 @@ public class FullMovieDto {
 
     private List<PersonDto> actors;
 
-    private int ownerId;
+    private String ownerId;
 
     private int year;
 

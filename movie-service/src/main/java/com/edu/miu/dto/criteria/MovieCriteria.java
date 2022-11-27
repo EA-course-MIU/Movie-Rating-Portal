@@ -14,7 +14,7 @@ public class MovieCriteria {
 
     private String title;
 
-    private int ownerId;
+    private String ownerId;
 
     private int year;
     private int duration;

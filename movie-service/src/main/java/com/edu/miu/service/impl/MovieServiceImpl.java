@@ -17,6 +17,7 @@ import com.edu.miu.repository.MovieRepository;
 import com.edu.miu.enums.MediaType;
 import com.edu.miu.publisher.MoviePublisher;
 import com.edu.miu.publisher.RabbitMQService;
+import com.edu.miu.security.AuthHelper;
 import com.edu.miu.service.MetaDataService;
 import com.edu.miu.service.MovieService;
 import com.edu.miu.utils.Utils;
@@ -35,6 +36,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Value("#{new Boolean('${kafka.enabled:true}')}")
     private boolean isEnabledKafka;
+
+    private final AuthHelper authHelper;
 
     private final MovieRepository movieRepository;
 
@@ -90,6 +93,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public FullMovieDto addMovie(MovieDto movieDto) {
+        movieDto.setOwnerId(authHelper.getUserId());
         Movie movie = movieRepository.save(this.convertTo((this.validateMetadata(movieDto))));
         return this.convertToFullMovieDto(movie);
     }
@@ -121,7 +125,7 @@ public class MovieServiceImpl implements MovieService {
     public FullMovieDto updateMovie(int id, MovieDto movieDto) {
         Movie movie = this.getMovieById(id);
 
-        if (movie != null) {
+        if (movie != null && (authHelper.getUserId().equals(movie.getOwnerId()) || authHelper.isAdmin())) {
             movieDto = this.validateMetadata(movieDto);
 
             if (movieDto.getDescription() != null && !movie.getDescription().equals(movieDto.getDescription())) {
@@ -133,9 +137,6 @@ public class MovieServiceImpl implements MovieService {
             if (movieDto.getAverageRating() > 0 && movie.getAverageRating() != movieDto.getAverageRating()) {
                 movie.setAverageRating(movieDto.getAverageRating());
             }
-            if (movieDto.getOwnerId() > 0 && movie.getOwnerId() != movieDto.getOwnerId()) {
-                movie.setOwnerId(movieDto.getOwnerId());
-            }
             if (movieDto.getYear() > 1900 && movie.getYear() != movieDto.getYear()) {
                 movie.setYear(movieDto.getYear());
             }
@@ -146,9 +147,10 @@ public class MovieServiceImpl implements MovieService {
             this.updateMediaGenre(movie, movieDto);
             this.updateMediaDirectors(movie, movieDto);
             this.updateMediaActors(movie, movieDto);
+            return this.convertToFullMovieDto(movieRepository.save(movie));
         }
 
-        return this.convertToFullMovieDto(movieRepository.save(movie));
+        return null;
     }
 
     private void updateMediaGenre(Movie movie, MovieDto movieDto) {
@@ -239,7 +241,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieDto deleteMovie(int id) {
         Movie movie = this.getMovieById(id);
 
-        if (movie != null) {
+        if (movie != null && (authHelper.getUserId().equals(movie.getOwnerId()) || authHelper.isAdmin())) {
             movieRepository.deleteById(id);
             MediaDto mediaDto = new MediaDto();
             mediaDto.setId(id);

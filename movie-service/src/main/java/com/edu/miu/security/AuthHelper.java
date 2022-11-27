@@ -22,4 +22,8 @@ public class AuthHelper {
     public String getUserId() {
         return getUserDetails().getId();
     }
+
+    public boolean isAdmin() {
+        return getUserDetails().isAdmin();
+    }
 }

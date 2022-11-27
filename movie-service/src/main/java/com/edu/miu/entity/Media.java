@@ -33,7 +33,7 @@ public abstract class Media implements Serializable {
     private String description;
     private double averageRating;
 
-    private int ownerId;
+    private String ownerId;
 
     @ColumnDefault("false")
     private boolean isDisabled = false;
