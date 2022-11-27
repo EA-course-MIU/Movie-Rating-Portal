@@ -1,5 +1,8 @@
 version: "3.7"
 services:
+  #
+  # DATABASES
+  #
   user-db:
     image: postgres
     environment:
@@ -9,6 +12,8 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+    networks:
+      - db-network
   movie-db:
     image: postgres
     environment:
@@ -18,6 +23,8 @@ services:
     ports:
       - "5433:5432"
     restart: unless-stopped
+    networks:
+      - db-network
   comment-db:
     image: postgres
     environment:
@@ -27,6 +34,8 @@ services:
     ports:
       - "5434:5432"
     restart: unless-stopped
+    networks:
+      - db-network
   series-db:
     image: postgres
     environment:
@@ -36,6 +45,8 @@ services:
     ports:
       - "5435:5432"
     restart: unless-stopped
+    networks:
+      - db-network
   rating-db:
     image: postgres
     environment:
@@ -45,15 +56,19 @@ services:
     ports:
       - "5436:5432"
     restart: unless-stopped
+    networks:
+      - db-network
   metadata-db:
-      image: postgres
-      environment:
-        POSTGRES_DB: metadata-db
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: 1
-      ports:
-        - "5437:5432"
-      restart: unless-stopped
+    image: postgres
+    environment:
+      POSTGRES_DB: metadata-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5437:5432"
+    restart: unless-stopped
+    networks:
+        - db-network
   favorite-db:
     image: postgres
     environment:
@@ -63,13 +78,139 @@ services:
     ports:
       - "5438:5432"
     restart: unless-stopped
+    networks:
+      - db-network
 
+  #
+  # MICROSERVICES
+  #
+  config-server:
+    image: eacoursemiu/config-server:0.0.1
+    ports:
+      - "4040:4040"
+    restart: unless-stopped
+    networks:
+      - microservice-network
 
+  service-discovery:
+    image: eacoursemiu/service-discovery:0.0.1
+    container_name: service-discovery
+    ports:
+      - "8888:8888"
+    depends_on:
+      - config-server
+      - zipkin
+    networks:
+      - microservice-network
+    restart: unless-stopped
+
+  api-gateway:
+    image: eacoursemiu/api-gateway:0.0.1
+    container_name: api-gateway
+    ports:
+      - "8889:8889"
+    depends_on:
+      - config-server
+      - service-discovery
+    networks:
+      - microservice-network
+    restart: unless-stopped
+
+#  user-service:
+#    image: eacoursemiu/user-service
+#    container_name: user-service
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - user-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+
+#  movie-service:
+#    image: eacoursemiu/movie-service
+#    container_name: movie-service
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - movie-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+
+#  comment-service:
+#    image: eacoursemiu/comment-service
+#    container_name: comment-service
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - comment-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+
+  series-service:
+    image: eacoursemiu/series-service:0.0.1
+    container_name: series-service
+    depends_on:
+      - config-server
+      - service-discovery
+      - series-db
+    networks:
+      - microservice-network
+      - db-network
+    restart: unless-stopped
+
+#  rating-service:
+#    image: eacoursemiu/rating-service
+#    container_name: rating-service
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - rating-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+
+#  metadata-service:
+#    image: eacoursemiu/metadata-service
+#    container_name: metadata-service
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - metadata-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+
+  favorite-service:
+    image: eacoursemiu/favorite-service:0.0.1
+    container_name: favorite-service
+    depends_on:
+      - config-server
+      - service-discovery
+      - favorite-db
+    networks:
+      - microservice-network
+      - db-network
+    restart: unless-stopped
+
+  #
+  # ZIPKIN
+  #
   zipkin:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
 
+  #
+  # MESSAGING
+  #
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
     ports:
@@ -97,6 +238,10 @@ services:
       ALLOW_PLAINTEXT_LISTENER: yes
     restart: unless-stopped
 
+
+  #
+  # KEYCLAOK
+  #
   keycloak:
     environment:
       KEYCLOAK_ADMIN: admin
@@ -108,6 +253,9 @@ services:
       - "start-dev"
     restart: unless-stopped
 
+  #
+  # VAULT
+  #
   vault-server:
     image: vault:latest
     container_name: vault-microservices
@@ -118,3 +266,20 @@ services:
     environment:
       VAULT_ADDR: "http://0.0.0.0:8200"
       VAULT_DEV_ROOT_TOKEN_ID: "00000000-0000-0000-0000-000000000000"
+
+#
+# NETWORKS
+#
+
+networks:
+  db-network:
+    driver: bridge
+  zipkin-network:
+    driver: bridge
+    name: zipkin-microservice-network
+  config-server-network:
+    driver: bridge
+    name: config-server-microservice-network
+  microservice-network:
+    driver: bridge
+    name: microservice-network

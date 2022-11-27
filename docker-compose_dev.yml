@@ -1,0 +1,120 @@
+version: "3.7"
+services:
+  user-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: user-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  movie-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: movie-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+  comment-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: comment-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+  series-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: series-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+  rating-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: rating-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5436:5432"
+    restart: unless-stopped
+  metadata-db:
+      image: postgres
+      environment:
+        POSTGRES_DB: metadata-db
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 1
+      ports:
+        - "5437:5432"
+      restart: unless-stopped
+  favorite-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: favorite-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5438:5432"
+    restart: unless-stopped
+
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    ports:
+      - "2181:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: yes
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+    restart: unless-stopped
+
+  keycloak:
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    image: quay.io/keycloak/keycloak:20.0.1
+    ports:
+      - "8080:8080"
+    command:
+      - "start-dev"
+    restart: unless-stopped
+
+  vault-server:
+    image: vault:latest
+    container_name: vault-microservices
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: "00000000-0000-0000-0000-000000000000"
