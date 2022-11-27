@@ -7,12 +7,14 @@ spec:
     - name: pgql
       port: 5432
       targetPort: 5432
+      nodePort: 30082
       protocol: TCP
   selector:
     app: postgres
+  type: NodePort
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: postgres
 spec:
@@ -35,11 +37,11 @@ spec:
               subPath: pgdata
           env:
             - name: POSTGRES_USER
-              value: root
+              value: postgres
             - name: POSTGRES_PASSWORD
-              value: password
+              value: postgres
             - name: POSTGRES_DB
-              value: kong
+              value: comment-db
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
           ports:
@@ -54,3 +56,33 @@ spec:
         resources:
           requests:
             storage: 10Gi
+#---
+#    kind: PersistentVolume
+#    apiVersion: v1
+#    metadata:
+#      name: postgres-pv-volume
+#      labels:
+#        type: local
+#        app: postgres
+#    spec:
+#      storageClassName: manual
+#      capacity:
+#        storage: 5Gi
+#      accessModes:
+#        - ReadWriteMany
+#      hostPath:
+#        path: "/mnt/data"
+#---
+#    kind: PersistentVolumeClaim
+#    apiVersion: v1
+#    metadata:
+#      name: postgres-pv-claim
+#      labels:
+#        app: postgres
+#    spec:
+#      storageClassName: manual
+#      accessModes:
+#        - ReadWriteMany
+#      resources:
+#        requests:
+#          storage: 5Gi

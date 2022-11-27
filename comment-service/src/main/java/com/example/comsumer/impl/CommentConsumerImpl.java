@@ -30,14 +30,14 @@ public class CommentConsumerImpl implements CommentConsumer {
         }
     }
 
-    @Override
-    public void receiveRabbitMessageFromMovie (MediaDto mediaDto)
-    {
-        if (mediaDto.getMediaId () > 0 && mediaDto.getMediaType() != null) {
-            commentService.deleteCommentByMediaId(mediaDto);
-            System.out.println(mediaDto);
-        }
-    }
+//    @Override
+//    public void receiveRabbitMessageFromMovie (MediaDto mediaDto)
+//    {
+//        if (mediaDto.getMediaId () > 0 && mediaDto.getMediaType() != null) {
+//            commentService.deleteCommentByMediaId(mediaDto);
+//            System.out.println(mediaDto);
+//        }
+//    }
 
     @Override
     public void receiveMessageFromUser (UserDto userDto) {

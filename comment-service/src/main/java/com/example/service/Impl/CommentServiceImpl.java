@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     }
     @Override
     @Transactional
-    public List<CommentDto> deleteByUserId (int id) {
+    public List<CommentDto> deleteAllByUserId (int id) {
         List<Comment> comments = commentRepo.findAllByUserId (id);
         if(comments != null) {
             commentRepo.deleteAllByUserId (id);
@@ -50,6 +50,20 @@ public class CommentServiceImpl implements CommentService {
             return commentMapper.toDtos (comments);
     }
 
+    @Override
+    @Transactional
+    public CommentDto deleteByUserId (Integer id,int commentId) {
+        List<Comment> comments = commentRepo.findAllByUserId (id);
+        Comment exist = comments.stream ().filter (c -> c.getId () == commentId).findAny ().orElse (null);
+
+        if(exist == null) {
+            throw new RuntimeException ("Comment of User Id:"+id+"is not exist");
+        }
+        else {
+            commentRepo.deleteById (commentId);
+        }
+        return commentMapper.toDto (exist);
+    }
     @Override
     @Transactional
     public CommentDto addByUserId (int id,CommentDto commentDto) {
@@ -77,6 +91,8 @@ public class CommentServiceImpl implements CommentService {
         }
         return commentMapper.toDto (exist);
     }
+
+
 
     @Override
     @Transactional

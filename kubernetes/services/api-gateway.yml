@@ -1,38 +1,38 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: comment-service
+  name: api-gateway
   labels:
-    app: comment-service
+    app: api-gateway
 spec:
   ports:
     - name: http
-      port: 8080
-      targetPort: 80
-      nodePort: 30081
+      port: 8889
+      targetPort: 8889
+      nodePort: 30080
   selector:
-    app: comment-service
+    app: api-gateway
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: comment-service
+  name: api-gateway
   labels:
-    app: comment-service
+    app: api-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: comment-service
+      app: api-gateway
   template:
     metadata:
       labels:
-        app: comment-service
+        app: api-gateway
     spec:
       containers:
-        - name: comment-service
-          image: kelvinus2022/comment-service:1.0.5
+        - name: api-gateway
+          image: kelvinus2022/api-gateway:1.0.0
 #          imagePullPolicy: Never
 
 #          configmap
@@ -46,7 +46,7 @@ spec:
 #                  key: account-service-secret-key
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
 # Kubernetes check health service
 #          readinessProbe:
 #            httpGet:

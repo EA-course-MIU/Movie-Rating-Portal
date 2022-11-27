@@ -1,38 +1,38 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: comment-service
+  name: service-discovery
   labels:
-    app: comment-service
+    app: service-discovery
 spec:
   ports:
     - name: http
-      port: 8080
+      port: 8888
       targetPort: 80
-      nodePort: 30081
+      nodePort: 30083
   selector:
-    app: comment-service
+    app: service-discovery
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: comment-service
+  name: service-discovery
   labels:
-    app: comment-service
+    app: service-discovery
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: comment-service
+      app: service-discovery
   template:
     metadata:
       labels:
-        app: comment-service
+        app: service-discovery
     spec:
       containers:
-        - name: comment-service
-          image: kelvinus2022/comment-service:1.0.5
+        - name: service-discovery
+          image: kelvinus2022/service-discovery:1.0.0
 #          imagePullPolicy: Never
 
 #          configmap

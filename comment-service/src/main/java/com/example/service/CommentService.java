@@ -13,11 +13,12 @@ public interface CommentService {
 
     List<CommentDto> findByUserAndMedia (int userId,int mediaId);
 
-    List<CommentDto> deleteByUserId (int id);
+    List<CommentDto> deleteAllByUserId (int id);
 
     CommentDto addByUserId (int id,CommentDto commentDto);
 
     CommentDto updateByUserId (Integer id,CommentDto commentDto);
+    CommentDto deleteByUserId (Integer id,int commentId);
 
     void deleteCommentByMediaId (MediaDto mediaDto);
 

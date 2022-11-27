@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:18
 LABEL MAINTAINER="Viet Tri Le"
 LABEL APPLICATION="Comment Service"
 WORKDIR ./
