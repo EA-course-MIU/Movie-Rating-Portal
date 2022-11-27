@@ -86,6 +86,8 @@ services:
   #
   config-server:
     image: eacoursemiu/config-server:0.0.1
+    ports:
+      - "4040:4040"
     environment:
       - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
       - spring.cloud.config.server.vault.host=vault-server

@@ -1,10 +1,9 @@
 package com.edu.miu.security;
 
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -15,16 +14,12 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
-@Component
-@PropertySource("classpath:application.properties")
+@Service
+@RequiredArgsConstructor
 public class JwtHelper {
 
+    @Value(value = "${keycloak.public-key}")
     private String rsaPublicKey;
-
-    @Autowired
-    public JwtHelper(@Value("${keycloak.public-key}") String rsaPublicKey) {
-        this.rsaPublicKey = rsaPublicKey;
-    }
 
     private final static String ALG_KEYCLOAK = "RSA";
 
