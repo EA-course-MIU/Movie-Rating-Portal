@@ -18,7 +18,7 @@ spring:
           clone-on-start: true
           uri: https://github.com/EA-course-MIU/config-repo
           default-label: main
-          search-paths: config
+          search-paths: dev
     service-registry:
       auto-registration:
         enabled: true

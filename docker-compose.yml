@@ -3,17 +3,17 @@ services:
   #
   # DATABASES
   #
-  user-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: user-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
-    networks:
-      - db-network
+#  user-db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: user-db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1
+#    ports:
+#      - "5432:5432"
+#    restart: unless-stopped
+#    networks:
+#      - db-network
   movie-db:
     image: postgres
     environment:
@@ -25,61 +25,61 @@ services:
     restart: unless-stopped
     networks:
       - db-network
-  comment-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: comment-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    ports:
-      - "5434:5432"
-    restart: unless-stopped
-    networks:
-      - db-network
-  series-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: series-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    ports:
-      - "5435:5432"
-    restart: unless-stopped
-    networks:
-      - db-network
-  rating-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: rating-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    ports:
-      - "5436:5432"
-    restart: unless-stopped
-    networks:
-      - db-network
-  metadata-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: metadata-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    ports:
-      - "5437:5432"
-    restart: unless-stopped
-    networks:
-        - db-network
-  favorite-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: favorite-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    ports:
-      - "5438:5432"
-    restart: unless-stopped
-    networks:
-      - db-network
+#  comment-db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: comment-db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1
+#    ports:
+#      - "5434:5432"
+#    restart: unless-stopped
+#    networks:
+#      - db-network
+#  series-db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: series-db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1
+#    ports:
+#      - "5435:5432"
+#    restart: unless-stopped
+#    networks:
+#      - db-network
+#  rating-db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: rating-db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1
+#    ports:
+#      - "5436:5432"
+#    restart: unless-stopped
+#    networks:
+#      - db-network
+#  metadata-db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: metadata-db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1
+#    ports:
+#      - "5437:5432"
+#    restart: unless-stopped
+#    networks:
+#        - db-network
+#  favorite-db:
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: favorite-db
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1
+#    ports:
+#      - "5438:5432"
+#    restart: unless-stopped
+#    networks:
+#      - db-network
 
   #
   # MICROSERVICES
@@ -91,6 +91,7 @@ services:
     environment:
       - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
       - spring.cloud.config.server.vault.host=vault-server
+      - spring.cloud.config.server.git.search-paths=docker
       - spring.zipkin.base-url=http://zipkin:9411
     depends_on:
       - service-discovery
@@ -120,25 +121,25 @@ services:
     networks:
       - microservice-network
 
-  user-service:
-    image: eacoursemiu/user-service:0.0.1
-    container_name: user-service
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
-      - spring.config.import=optional:configserver:http://config-server:4040
-      - spring.zipkin.base-url=http://zipkin:9411
-      - spring.datasource.url=jdbc:postgresql://user-db:5432/user-db
-    depends_on:
-      - config-server
-      - service-discovery
-      - user-db
-    networks:
-      - microservice-network
-      - db-network
-    restart: unless-stopped
+#  user-service:
+#    image: eacoursemiu/user-service:0.0.1
+#    container_name: user-service
+#    environment:
+#      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+#      - spring.config.import=optional:configserver:http://config-server:4040
+#      - spring.zipkin.base-url=http://zipkin:9411
+#      - spring.datasource.url=jdbc:postgresql://user-db:5432/user-db
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - user-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
 
   movie-service:
-    image: eacoursemiu/movie-service:0.0.1
+    image: eacoursemiu/movie-service:0.0.2
     environment:
       - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
       - spring.config.import=optional:configserver:http://config-server:4040
@@ -151,84 +152,84 @@ services:
     networks:
       - microservice-network
       - db-network
-
-  comment-service:
-    image: eacoursemiu/comment-service:0.0.1
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
-      - spring.config.import=optional:configserver:http://config-server:4040
-      - spring.zipkin.base-url=http://zipkin:9411
-      - spring.datasource.url=jdbc:postgresql://comment-db:5432/comment-db
-    depends_on:
-      - config-server
-      - service-discovery
-      - comment-db
-    networks:
-      - microservice-network
-      - db-network
-    restart: unless-stopped
-
-  series-service:
-    image: eacoursemiu/series-service:0.0.1
-    depends_on:
-      - config-server
-      - service-discovery
-      - series-db
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
-      - spring.config.import=optional:configserver:http://config-server:4040
-      - spring.zipkin.base-url=http://zipkin:9411
-      - spring.datasource.url=jdbc:postgresql://series-db:5432/series-db
-    networks:
-      - microservice-network
-      - db-network
-
-  rating-service:
-    image: eacoursemiu/rating-service:0.0.1
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
-      - spring.config.import=optional:configserver:http://config-server:4040
-      - spring.zipkin.base-url=http://zipkin:9411
-      - spring.datasource.url=jdbc:postgresql://rating-db:5432/rating-db
-    depends_on:
-      - config-server
-      - service-discovery
-      - rating-db
-    networks:
-      - microservice-network
-      - db-network
-    restart: unless-stopped
-
-  metadata-service:
-    image: eacoursemiu/metadata-service:0.0.1
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
-      - spring.config.import=optional:configserver:http://config-server:4040
-      - spring.zipkin.base-url=http://zipkin:9411
-      - spring.datasource.url=jdbc:postgresql://metadata-db:5432/metadata-db
-    depends_on:
-      - config-server
-      - service-discovery
-      - metadata-db
-    networks:
-      - microservice-network
-      - db-network
-    restart: unless-stopped
-
-  favorite-service:
-    image: eacoursemiu/favorite-service:0.0.1
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
-      - spring.config.import=optional:configserver:http://config-server:4040
-      - spring.zipkin.base-url=http://zipkin:9411
-      - spring.datasource.url=jdbc:postgresql://favorite-db:5432/favorite-db
-    depends_on:
-      - config-server
-      - service-discovery
-      - favorite-db
-    networks:
-      - microservice-network
-      - db-network
+#
+#  comment-service:
+#    image: eacoursemiu/comment-service:0.0.1
+#    environment:
+#      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+#      - spring.config.import=optional:configserver:http://config-server:4040
+#      - spring.zipkin.base-url=http://zipkin:9411
+#      - spring.datasource.url=jdbc:postgresql://comment-db:5432/comment-db
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - comment-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+#
+#  series-service:
+#    image: eacoursemiu/series-service:0.0.1
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - series-db
+#    environment:
+#      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+#      - spring.config.import=optional:configserver:http://config-server:4040
+#      - spring.zipkin.base-url=http://zipkin:9411
+#      - spring.datasource.url=jdbc:postgresql://series-db:5432/series-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#
+#  rating-service:
+#    image: eacoursemiu/rating-service:0.0.1
+#    environment:
+#      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+#      - spring.config.import=optional:configserver:http://config-server:4040
+#      - spring.zipkin.base-url=http://zipkin:9411
+#      - spring.datasource.url=jdbc:postgresql://rating-db:5432/rating-db
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - rating-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+#
+#  metadata-service:
+#    image: eacoursemiu/metadata-service:0.0.1
+#    environment:
+#      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+#      - spring.config.import=optional:configserver:http://config-server:4040
+#      - spring.zipkin.base-url=http://zipkin:9411
+#      - spring.datasource.url=jdbc:postgresql://metadata-db:5432/metadata-db
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - metadata-db
+#    networks:
+#      - microservice-network
+#      - db-network
+#    restart: unless-stopped
+#
+#  favorite-service:
+#    image: eacoursemiu/favorite-service:0.0.1
+#    environment:
+#      - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
+#      - spring.config.import=optional:configserver:http://config-server:4040
+#      - spring.zipkin.base-url=http://zipkin:9411
+#      - spring.datasource.url=jdbc:postgresql://favorite-db:5432/favorite-db
+#    depends_on:
+#      - config-server
+#      - service-discovery
+#      - favorite-db
+#    networks:
+#      - microservice-network
+#      - db-network
 
   #
   # ZIPKIN
