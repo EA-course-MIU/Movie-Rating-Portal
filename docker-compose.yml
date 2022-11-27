@@ -167,7 +167,7 @@ services:
     restart: unless-stopped
 
   series-service:
-    image: eacoursemiu/series-service:0.0.2
+    image: eacoursemiu/series-service:0.0.1
     depends_on:
       - config-server
       - service-discovery

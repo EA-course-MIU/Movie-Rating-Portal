@@ -40,7 +40,7 @@ public class MovieDaoImpl implements MovieDao {
             predicates.add(builder.like(root.get("title"), this.addLikeChar(movieCriteria.getTitle())));
         }
 
-        if(movieCriteria.getOwnerId() > 0){
+        if(movieCriteria.getOwnerId() != null && !movieCriteria.getOwnerId().isEmpty()){
             predicates.add(builder.equal(root.get("ownerId"), movieCriteria.getOwnerId()));
         }
 

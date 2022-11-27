@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:18
 LABEL MAINTAINER="Kelvin Le"
 LABEL APPLICATION="Metadata Service"
 WORKDIR ./

@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:18
 LABEL MAINTAINER=""
 LABEL APPLICATION="User service"
 WORKDIR ./
