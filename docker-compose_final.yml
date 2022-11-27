@@ -81,9 +81,9 @@ services:
     networks:
       - db-net
 
-#
-# MICROSERVICES
-#
+  #
+  # MICROSERVICES
+  #
   config-server:
     image: eacoursemiu/config-server
     ports:
