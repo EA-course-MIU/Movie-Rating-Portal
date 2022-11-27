@@ -11,7 +11,7 @@ public interface SeriesService {
     List<SeriesDto> getAll();
     void deleteById(int id, String userId);
     SeriesDto updateSeries(int id, RequestSeriesDto series, String userId);
-    SeriesDto saveSeries(RequestSeriesDto series);
+    SeriesDto saveSeries(RequestSeriesDto series, String userId);
     List<SeriesDto> filter(FilterDto filterDto);
     SeriesDto updateRating(int id, double rating);
 }

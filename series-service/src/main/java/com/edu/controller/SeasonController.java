@@ -3,6 +3,7 @@ package com.edu.controller;
 import com.edu.dto.EpisodeDto;
 import com.edu.dto.SeasonDto;
 import com.edu.service.EpisodeService;
+import com.edu.service.JwtService;
 import com.edu.service.SeasonService;
 import com.edu.dto.RequestEpisodeDto;
 import com.edu.dto.RequestSeasonDto;
@@ -15,6 +16,8 @@ import java.util.List;
 @RequestMapping("/seasons")
 public class SeasonController {
     @Autowired
+    private JwtService jwtService;
+    @Autowired
     private SeasonService seasonService;
     @Autowired
     private EpisodeService episodeService;
@@ -24,18 +27,18 @@ public class SeasonController {
     }
 
     @PutMapping("/{id}")
-    public SeasonDto update(@PathVariable int id, @RequestBody RequestSeasonDto seasonDto){
-        return seasonService.update(id, seasonDto);
+    public SeasonDto update(@PathVariable int id, @RequestBody RequestSeasonDto seasonDto, @RequestHeader String authorization){
+        return seasonService.update(id, seasonDto, jwtService.getUserIdFromToken(authorization));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
-        seasonService.delete(id);
+    public void delete(@PathVariable int id, @RequestHeader String authorization){
+        seasonService.delete(id, jwtService.getUserIdFromToken(authorization));
     }
 
     @PostMapping("/{seasonId}/episodes")
-    public EpisodeDto addEpisode(@PathVariable int seasonId, @RequestBody RequestEpisodeDto episodeDto){
-        return episodeService.save(seasonId, episodeDto);
+    public EpisodeDto addEpisode(@PathVariable int seasonId, @RequestBody RequestEpisodeDto episodeDto, @RequestHeader String authorization){
+        return episodeService.save(seasonId, episodeDto, jwtService.getUserIdFromToken(authorization));
     }
 
     @GetMapping("/{seasonId}/episodes")

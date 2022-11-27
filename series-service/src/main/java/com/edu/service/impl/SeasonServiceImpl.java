@@ -36,9 +36,9 @@ public class SeasonServiceImpl implements SeasonService {
 
     @Transactional
     @Override
-    public SeasonDto create(int seriesId, RequestSeasonDto seasonDto) {
+    public SeasonDto create(int seriesId, RequestSeasonDto seasonDto, String userId) {
         var series = seriesRepo.findById(seriesId).get();
-        var season = new Season(seasonDto.getName(), seasonDto.getSeasonNumber(), seasonDto.getYear(), series, new ArrayList<>(), "1");
+        var season = new Season(seasonDto.getName(), seasonDto.getSeasonNumber(), seasonDto.getYear(), series, new ArrayList<>(), userId);
         series.getSeasons().add(season);
         seasonRepo.save(season);
         return seasonMapper.toDto(season);
@@ -46,8 +46,11 @@ public class SeasonServiceImpl implements SeasonService {
 
     @Transactional
     @Override
-    public SeasonDto update(int seasonId, RequestSeasonDto seasonDto) {
+    public SeasonDto update(int seasonId, RequestSeasonDto seasonDto, String userId) {
         var updatingSeason = seasonRepo.findById(seasonId).get();
+        if(!updatingSeason.getOwnerId().equals(userId)){
+            throw new RuntimeException("You are not allowed to update this season");
+        }
         if(seasonDto.getName() != null){
             updatingSeason.setName(seasonDto.getName());
         }
@@ -62,7 +65,11 @@ public class SeasonServiceImpl implements SeasonService {
 
     @Transactional
     @Override
-    public void delete(int seasonId) {
+    public void delete(int seasonId, String userId) {
+        var deletingSeason = seasonRepo.findById(seasonId).get();
+        if(!deletingSeason.getOwnerId().equals(userId)){
+            throw new RuntimeException("You are not allowed to delete this season");
+        }
         seasonRepo.deleteById(seasonId);
     }
 }

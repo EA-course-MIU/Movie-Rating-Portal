@@ -80,12 +80,12 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Transactional
     @Override
-    public SeriesDto saveSeries(RequestSeriesDto series) {
+    public SeriesDto saveSeries(RequestSeriesDto series, String userId) {
         Series newSeries = new Series();
         newSeries.setTitle(series.getTitle());
         newSeries.setDescription(series.getDescription());
         newSeries.setStatus(series.getStatus());
-        newSeries.setOwnerId("1");
+        newSeries.setOwnerId(userId);
         seriesRepo.save(newSeries);
         return seriesMapper.toDto(newSeries);
     }

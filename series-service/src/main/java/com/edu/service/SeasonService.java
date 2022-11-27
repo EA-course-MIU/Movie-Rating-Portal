@@ -8,7 +8,7 @@ import java.util.List;
 public interface SeasonService {
     SeasonDto getById(int seasonId);
     List<SeasonDto> getAll(int seriesId);
-    SeasonDto create(int seriesId, RequestSeasonDto seasonDto);
-    SeasonDto update(int seasonId, RequestSeasonDto seasonDto);
-    void delete(int seasonId);
+    SeasonDto create(int seriesId, RequestSeasonDto seasonDto, String userId);
+    SeasonDto update(int seasonId, RequestSeasonDto seasonDto, String userId);
+    void delete(int seasonId, String userId);
 }

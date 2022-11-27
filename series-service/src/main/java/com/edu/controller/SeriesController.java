@@ -35,8 +35,8 @@ public class SeriesController {
     }
 
     @PostMapping
-    public SeriesDto saveSeries(@RequestBody RequestSeriesDto series) {
-        return seriesService.saveSeries(series);
+    public SeriesDto saveSeries(@RequestBody RequestSeriesDto series, @RequestHeader String authorization) {
+        return seriesService.saveSeries(series, jwtService.getUserIdFromToken(authorization));
     }
 
     @PutMapping("/{id}")
@@ -60,7 +60,7 @@ public class SeriesController {
     }
 
     @PostMapping("/{seriesId}/seasons")
-    public SeasonDto saveSeason(@PathVariable int seriesId, @RequestBody RequestSeasonDto season) {
-        return seasonService.create(seriesId, season);
+    public SeasonDto saveSeason(@PathVariable int seriesId, @RequestBody RequestSeasonDto season, @RequestHeader String authorization) {
+        return seasonService.create(seriesId, season, jwtService.getUserIdFromToken(authorization));
     }
 }
