@@ -145,6 +145,7 @@ services:
       - spring.config.import=optional:configserver:http://config-server:4040
       - spring.zipkin.base-url=http://zipkin:9411
       - spring.datasource.url=jdbc:postgresql://movie-db:5432/movie-db
+      - keycloak.public-key=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkMjKgPrcd9RUBPhS42SQ6SqXQrk44aTUQUvekOe/O6TSW5InzVgc5ZY0XC7ENcfshsE/E8nIb6L5qaJ7H9k13BjVsLtcblRg6bMPGmX4DtyWwauVgtcDr7Hqb6XexiPfahpxOKP9xV/KDDvMfX4j/tXgR2rDeR/kKF+0vNE6tCReBhdyIwYZPdzRC9aIJtx6CezJx1TK7kD48XBm5j/DzsnQfJYMKZlNKzmdzdPEouRY+ZWeHT2otDxCGaeLNMa/uApkd8+2exMAQucXwjDS0vnUGF3VP5A06p6mCGAxvKhFrw5gLpx4e+fFidqKModavz/xEkriEJ+nydxL72C6+QIDAQAB
     depends_on:
       - config-server
       - service-discovery
@@ -185,7 +186,7 @@ services:
       - db-network
 #
   rating-service:
-    image: eacoursemiu/rating-service:0.0.1
+    image: eacoursemiu/rating-service:0.0.2
     environment:
       - eureka.client.serviceUrl.defaultZone=http://service-discovery:8888/eureka
       - spring.config.import=optional:configserver:http://config-server:4040
