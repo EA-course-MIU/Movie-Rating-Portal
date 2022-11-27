@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    vault:
+      kv:
+        enabled: 'true'
+      scheme: http
+      authentication: token
+      token: 00000000-0000-0000-0000-000000000000
+    config:
+      import: vault://

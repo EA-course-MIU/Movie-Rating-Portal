@@ -1,8 +1,8 @@
 package com.edu.miu.security;
 
+import com.edu.miu.config.vault.KeycloakConfiguration;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyFactory;
@@ -18,18 +18,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtHelper {
 
-    @Value(value = "${keycloak.public-key}")
-    private String rsaPublicKey;
+    private final KeycloakConfiguration keycloak;
 
     private final static String ALG_KEYCLOAK = "RSA";
 
     private final long expiration = 5 * 60 * 60 * 60;
+
     public String generateToken(String email) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS512, this.getPublicKey(rsaPublicKey))
+                .signWith(SignatureAlgorithm.HS512, this.getPublicKey())
                 .compact();
     }
 
@@ -38,13 +38,13 @@ public class JwtHelper {
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 60))
-                .signWith(SignatureAlgorithm.HS512, this.getPublicKey(rsaPublicKey))
+                .signWith(SignatureAlgorithm.HS512, this.getPublicKey())
                 .compact();
     }
 
     public String getSubject(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return Jwts.parser()
-                .setSigningKey(this.getPublicKey(rsaPublicKey))
+                .setSigningKey(this.getPublicKey())
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -52,7 +52,7 @@ public class JwtHelper {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .setSigningKey(this.getPublicKey(rsaPublicKey))
+                    .setSigningKey(this.getPublicKey())
                     .parseClaimsJws(token);
             return true;
         } catch (NoSuchAlgorithmException e) {
@@ -66,15 +66,14 @@ public class JwtHelper {
     public String doGenerateRefreshToken(Map<String, Object> claims, String subject) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS512, this.getPublicKey(rsaPublicKey)).compact();
+                .signWith(SignatureAlgorithm.HS512, this.getPublicKey()).compact();
     }
-
 
     public Claims getUserIdFromToken(String token) {
         Claims result = null;
         try {
             result = Jwts.parser()
-                    .setSigningKey(this.getPublicKey(rsaPublicKey))
+                    .setSigningKey(this.getPublicKey())
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
@@ -86,7 +85,8 @@ public class JwtHelper {
         return result;
     }
 
-    private PublicKey getPublicKey(String rsaPublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private PublicKey getPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String rsaPublicKey = keycloak.getPublicKey();
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(rsaPublicKey));
         KeyFactory kf = KeyFactory.getInstance(ALG_KEYCLOAK);
         return kf.generatePublic(keySpec);
