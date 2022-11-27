@@ -285,10 +285,14 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     image: quay.io/keycloak/keycloak:20.0.1
+    volumes:
+      - ./keycloak/realms/export:/tmp/export
+      - ./keycloak/realms/import:/opt/keycloak/data/import
     ports:
       - "8080:8080"
     command:
       - "start-dev"
+      - "--import-realm"
     restart: unless-stopped
     networks:
       - microservice-network

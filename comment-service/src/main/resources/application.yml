@@ -3,3 +3,71 @@ spring:
     name: comment-service
   config:
     import: optional:configserver:http://localhost:4040
+#server:
+#  port: 5557
+#  error:
+#    include-message: always
+#
+#
+#spring:
+#  #  config:
+#  #    activate:
+#  #      on-profile: dev
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#        show_sql: true
+#    defer-datasource-initialization: true
+#    hibernate:
+#      ddl-auto: create
+#  cloud:
+#    service-registry:
+#      auto-registration:
+#        enabled: true
+#  application:
+#    name: comment-service
+#  datasource:
+##    password: 1
+#    password: postgres
+#    username: postgres
+#    url: jdbc:postgresql://postgres:30082/comment-db
+##    url: jdbc:postgresql://localhost:5434/postgres
+#  sql:
+#    init:
+#      mode: always
+#
+#  kafka:
+#    consumer:
+#      group-id: ea_group_8
+#      auto-offset-reset: earliest
+#    bootstrap-servers: http://localhost:9092
+#
+#  zipkin:
+#    base-url: http://localhost:9411
+#
+#eureka:
+#  instance:
+#    leaseRenewalIntervalInSeconds: 10
+#    metadataMap:
+#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
+#    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#  client:
+#    registryFetchIntervalSeconds: 5
+#    serviceUrl:
+#      registerWithEureka: true
+#      defaultZone: http://localhost:8888/eureka/
+#    enabled: true
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#  endpoint:
+#    health:
+#      show-details: always
+#
+#keycloak:
+#  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp5pFJ5e6qx+S1HlWEIJGm6lmRjope5wDJgO+w0Yboa1Q2vZAjxaNs8T/Ju4NPTXXK57I2PHeBJinR/XS49QV4jDGpJJT1ra7ti5rvDQ9SyZQoReVI5UWlQ27O8T/VFp15eZuoPXDU+4gVL2BAUC7KOXw0m88FTseRsXxyQvojgt0qSS8f37utS81g+/s52I3U9RIJBzVKHNZPBZsVYZP1PZh0O62YxPnLr4sXuRdznxBuPrP3JUF6IOdMACTMsxUEHn/S/K/6g29wnbPivSsGgEjVUjU2uYcnhiKjyoekGK5rQTChmIEM0zORoXY+piWlyb2H99WRGGMR0HyGp6yjQIDAQAB

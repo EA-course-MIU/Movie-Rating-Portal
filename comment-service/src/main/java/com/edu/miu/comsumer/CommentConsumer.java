@@ -6,7 +6,7 @@ import com.edu.miu.dto.UserDto;
 public interface CommentConsumer {
     void receiveMessageFromMovie(MediaDto mediaDto);
 
-    void receiveRabbitMessageFromMovie(MediaDto mediaDto);
+   // void receiveRabbitMessageFromMovie(MediaDto mediaDto);
     void receiveMessageFromUser(String userId);
 
 }

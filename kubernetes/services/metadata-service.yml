@@ -1,38 +1,38 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: comment-service
+  name: metadata-service
   labels:
-    app: comment-service
+    app: metadata-service
 spec:
   ports:
     - name: http
       port: 8080
       targetPort: 80
-      nodePort: 30081
+      nodePort: 30083
   selector:
-    app: comment-service
+    app: metadata-service
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: comment-service
+  name: metadata-service
   labels:
-    app: comment-service
+    app: metadata-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: comment-service
+      app: metadata-service
   template:
     metadata:
       labels:
-        app: comment-service
+        app: metadata-service
     spec:
       containers:
-        - name: comment-service
-          image: kelvinus2022/comment-service:1.0.5
+        - name: metadata-service
+          image: kelvinus2022/metadata-service:1.0.0
           ports:
             - name: http
               containerPort: 80

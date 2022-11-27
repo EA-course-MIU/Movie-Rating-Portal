@@ -27,15 +27,15 @@ public class CommentConsumerImpl implements CommentConsumer {
         }
     }
 
-    @Override
-    @RabbitListener(queues = {"remove-media-queue"})
-    public void receiveRabbitMessageFromMovie (MediaDto mediaDto)
-    {
-        if (mediaDto.getId () > 0 && mediaDto.getMediaType() != null) {
-            commentService.deleteCommentByMediaId(mediaDto);
-            System.out.println(mediaDto);
-        }
-    }
+//    @Override
+//    @RabbitListener(queues = {"remove-media-queue"})
+//    public void receiveRabbitMessageFromMovie (MediaDto mediaDto)
+//    {
+//        if (mediaDto.getId () > 0 && mediaDto.getMediaType() != null) {
+//            commentService.deleteCommentByMediaId(mediaDto);
+//            System.out.println(mediaDto);
+//        }
+//    }
 
     @KafkaListener(
             topics = "remove-user-topic",
