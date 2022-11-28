@@ -1,6 +1,8 @@
 package com.edu.service.impl;
 
 import com.edu.entity.Series;
+import com.edu.exception.BadRequestException;
+import com.edu.exception.ResourceNotFoundException;
 import com.edu.repo.SeriesRepo;
 import com.edu.service.SeriesService;
 import com.edu.dto.Filter.FilterDto;
@@ -36,7 +38,8 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Override
     public SeriesDto getById(int id) {
-        return seriesMapper.toDto(seriesRepo.findById(id).orElse(null));
+        var series = seriesRepo.findById(id).orElseThrow(() -> new RuntimeException("Series not found"));
+        return seriesMapper.toDto(series);
     }
 
     @Override
@@ -48,22 +51,19 @@ public class SeriesServiceImpl implements SeriesService {
     @Transactional
     @Override
     public void deleteById(int id, String userId) {
-        Series series = seriesRepo.findById(id).orElse(null);
-        if(series != null && series.getOwnerId().equals(userId)) {
-            seriesRepo.deleteById(id);
-        }
+        Series series = seriesRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Series not found"));
+        if (!series.getOwnerId().equals(userId)) throw new BadRequestException("You cannot delete this series");
+        seriesRepo.deleteById(id);
     }
 
 
     @Transactional
     @Override
     public SeriesDto updateSeries(int id, RequestSeriesDto series, String userId) {
-        Series updatingSeries = seriesRepo.findById(id).orElse(null);
-        if (updatingSeries == null) {
-            return null;
-        }
-        if(!updatingSeries.getOwnerId().equals(userId)){
-            return null;
+        Series updatingSeries = seriesRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Series not found"));
+
+        if (!updatingSeries.getOwnerId().equals(userId)) {
+            throw new BadRequestException("You cannot update this series");
         }
         if (series.getTitle() != null) {
             updatingSeries.setTitle(series.getTitle());
@@ -81,11 +81,16 @@ public class SeriesServiceImpl implements SeriesService {
     @Transactional
     @Override
     public SeriesDto saveSeries(RequestSeriesDto series, String userId) {
+        System.out.println("===="+ userId);
         Series newSeries = new Series();
         newSeries.setTitle(series.getTitle());
         newSeries.setDescription(series.getDescription());
         newSeries.setStatus(series.getStatus());
         newSeries.setOwnerId(userId);
+        newSeries.setGenres(new ArrayList<>());
+        newSeries.setActorIds(new ArrayList<>());
+        newSeries.setDirectorIds(new ArrayList<>());
+        newSeries.setGenres(new ArrayList<>());
         seriesRepo.save(newSeries);
         return seriesMapper.toDto(newSeries);
     }

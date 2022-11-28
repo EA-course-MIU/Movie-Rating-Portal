@@ -23,18 +23,18 @@ public class FavoriteController {
     private JwtService jwtService;
 
     @PostMapping
-    public FavoriteListDto createFavoriteList(@RequestBody RequestFavoriteListDto requestFavoriteListDto) {
-        return favoriteService.create(requestFavoriteListDto);
+    public FavoriteListDto createFavoriteList(@RequestBody RequestFavoriteListDto requestFavoriteListDto, @RequestHeader String authorization) {
+        return favoriteService.create(requestFavoriteListDto, jwtService.getUserIdFromToken(authorization));
     }
 
     @GetMapping
-    public List<FavoriteListDto> getAll() {
-        return favoriteService.getAll();
+    public List<FavoriteListDto> getAll(@RequestHeader String authorization) {
+        return favoriteService.getAllByUserId(jwtService.getUserIdFromToken(authorization));
     }
 
     @GetMapping("/{id}")
-    public FavoriteListDto getFavoriteList(@PathVariable int id) {
-        return favoriteService.getById(id);
+    public FavoriteListDto getFavoriteList(@PathVariable int id, @RequestHeader String authorization) {
+        return favoriteService.getById(id, jwtService.getUserIdFromToken(authorization));
     }
 
     @PutMapping("/{id}")

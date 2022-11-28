@@ -1,2 +1,2 @@
-INSERT INTO public.favorite_list (id, title, user_id) VALUES (DEFAULT, 'My Favorite List'::varchar(255), '1'::varchar(255));
-INSERT INTO public.favorite_media (media_id, media_type, favorite_list_id) VALUES (1, 'TV_SERIES', 1);
+INSERT INTO public.favorite_list (id, title, user_id) VALUES (10, 'My Favorite List'::varchar(255), '1'::varchar(255));
+INSERT INTO public.favorite_media (media_id, media_type, favorite_list_id) VALUES (10, 'TV_SERIES', 10);
