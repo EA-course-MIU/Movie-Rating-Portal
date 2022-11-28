@@ -1,24 +1,26 @@
 spring:
   profiles:
-    active: vault, git
+    active: native #vault, git
   cloud:
     config:
       server:
-        vault:
-          order: 1
-          host: 127.0.0.1
-          port: 8200
-          authentication: TOKEN
-          token: 00000000-0000-0000-0000-000000000000
-          scheme: http
-          kv-version: 2
-        git:
-          order: 2
-          skip-ssl-validation: true
-          clone-on-start: true
-          uri: https://github.com/EA-course-MIU/config-repo
-          default-label: main
-          search-paths: dev
+        native:
+          search-locations: file:///${user.home}/Documents/config-repo/dev
+#        vault:
+#          order: 1
+#          host: 127.0.0.1
+#          port: 8200
+#          authentication: TOKEN
+#          token: 00000000-0000-0000-0000-000000000000
+#          scheme: http
+#          kv-version: 2
+#        git:
+#          order: 2
+#          skip-ssl-validation: true
+#          clone-on-start: true
+#          uri: https://github.com/EA-course-MIU/config-repo
+#          default-label: main
+#          search-paths: dev
     service-registry:
       auto-registration:
         enabled: true

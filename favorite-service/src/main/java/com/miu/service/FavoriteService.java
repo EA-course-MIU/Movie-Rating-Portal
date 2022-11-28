@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface FavoriteService {
     List<FavoriteListDto> getAll();
-    FavoriteListDto getById(int id);
-    FavoriteListDto create(RequestFavoriteListDto requestFavoriteListDto);
+    FavoriteListDto getById(int id, String userId);
+    FavoriteListDto create(RequestFavoriteListDto requestFavoriteListDto, String userId);
     FavoriteListDto update(int id, RequestFavoriteListDto requestFavoriteListDto, String userId);
     FavoriteListDto addFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia, String userId);
     FavoriteListDto removeFavoriteMedia(int favoriteListId, RequestFavoriteMedia requestFavoriteMedia, String userId);

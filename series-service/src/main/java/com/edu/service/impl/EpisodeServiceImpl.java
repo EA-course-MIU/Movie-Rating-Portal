@@ -2,6 +2,8 @@ package com.edu.service.impl;
 
 import com.edu.dto.EpisodeDto;
 import com.edu.entity.Episode;
+import com.edu.exception.BadRequestException;
+import com.edu.exception.ResourceNotFoundException;
 import com.edu.mapper.EpisodeMapper;
 import com.edu.repo.EpisodeRepo;
 import com.edu.repo.SeasonRepo;
@@ -25,7 +27,8 @@ public class EpisodeServiceImpl implements EpisodeService {
 
     @Override
     public EpisodeDto getById(int id) {
-        return episodeMapper.toDto(episodeRepo.findById(id).get());
+        var episode = episodeRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Episode not found"));
+        return episodeMapper.toDto(episode);
     }
 
     @Override
@@ -37,7 +40,7 @@ public class EpisodeServiceImpl implements EpisodeService {
     @Transactional
     @Override
     public EpisodeDto save(int seasonId, RequestEpisodeDto episodeDto, String userId) {
-        var season = seasonRepo.findById(seasonId).get();
+        var season = seasonRepo.findById(seasonId).orElseThrow(() -> new ResourceNotFoundException("Season not found"));
         var newEpisode = new Episode(episodeDto.getName(), episodeDto.getEpisodeNumber(), episodeDto.getDuration(), season, userId);
         episodeRepo.save(newEpisode);
         return episodeMapper.toDto(newEpisode);
@@ -46,8 +49,8 @@ public class EpisodeServiceImpl implements EpisodeService {
     @Transactional
     @Override
     public EpisodeDto update(int id, RequestEpisodeDto episodeDto, String userId) {
-        var updatingEpisode = episodeRepo.findById(id).get();
-        if (updatingEpisode == null || !updatingEpisode.getOwnerId().equals(userId)) return null;
+        var updatingEpisode = episodeRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Episode not found"));
+        if (!updatingEpisode.getOwnerId().equals(userId)) throw new BadRequestException("You can't update this episode");
         if (episodeDto.getName() != null) updatingEpisode.setName(episodeDto.getName());
         if (episodeDto.getEpisodeNumber() != null) updatingEpisode.setEpisodeNumber(episodeDto.getEpisodeNumber());
         if (episodeDto.getDuration() != null) updatingEpisode.setDuration(episodeDto.getDuration());
